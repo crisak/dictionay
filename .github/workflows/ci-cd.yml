@@ -104,7 +104,10 @@ jobs:
 
       - name: Authenticate with Serverless
         run: |
-          echo ${{ secrets.SERVERLESS_ACCESS_KEY }} | serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          yarn serverless login
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+
       - name: Build applications
         run: yarn build:dev
         env:
