@@ -75,6 +75,7 @@ jobs:
         run: |
           # Admin environment (Next.js)
           cat > apps/admin/.env << EOF
+          NODE_ENV=development
           NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
           SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
           SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
@@ -105,6 +106,11 @@ jobs:
         run: yarn build:dev
         env:
           NODE_ENV: development
+          env:
+          # SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          # or if using AWS credentials directly
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # Deploy Admin (Next.js) to Vercel
       - name: Deploy Admin to Vercel
