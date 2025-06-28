@@ -15,7 +15,7 @@
     "deploy:dev": "sls deploy --stage dev --verbose",
     "deploy:function:dev": "sls deploy function --stage dev --verbose -f",
     "/** PROD */": "",
-    "prod": "sls offline start --stage prod",
+    "start": "sls offline start --stage prod",
     "build": "sls package --stage prod --verbose",
     "deploy:prod": "sls deploy --stage prod --verbose",
     "deploy:function:prod": "sls deploy function --stage prod --verbose -f"

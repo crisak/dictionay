@@ -29,7 +29,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-optional
 
       - name: Run linting
         run: yarn lint
@@ -62,7 +62,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-optional
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -102,7 +102,7 @@ jobs:
           EOF
 
       - name: Build applications
-        run: yarn build
+        run: yarn build:dev
         env:
           NODE_ENV: development
 
@@ -155,7 +155,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-optional
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
