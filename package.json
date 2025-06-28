@@ -2,7 +2,7 @@
   "name": "dictionary",
   "private": true,
   "scripts": {
-    "build:dev": "turbo run build --filter sls-api --filter admin",
+    "build:dev": "turbo run build:dev --filter sls-api --filter admin",
     "build": "turbo run build --filter sls-api --filter admin",
     "dev": "turbo run dev --filter sls-api --filter admin",
     "lint": "turbo run lint --filter sls-api --filter admin",

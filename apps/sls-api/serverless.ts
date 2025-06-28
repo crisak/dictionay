@@ -44,7 +44,7 @@ const serverlessConfig: ServerlessConfig = {
   provider: {
     name: 'aws',
     runtime: 'nodejs20.x',
-    profile: 'crisak',
+
     // enable API to API Gataway a observability
     tracing: {
       apiGateway: true,
