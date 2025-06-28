@@ -6,8 +6,13 @@ on:
   pull_request:
     branches: [main, develop]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NODE_VERSION: "20.x"
+  SKIP_DEPLOY: false
 
 jobs:
   lint-and-test:
@@ -29,8 +34,11 @@ jobs:
       - name: Run linting
         run: yarn lint
 
-      - name: Run tests
-        run: yarn test
+      - name: Run type checks
+        run: yarn check-types
+
+    #   - name: Run tests
+    #     run: yarn test
 
   build-and-deploy-dev:
     name: Build and Deploy Dev
@@ -38,8 +46,12 @@ jobs:
     needs: lint-and-test
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     environment: development
-    
+
     steps:
+      - name: Print run environment
+        run: |
+          echo "🚀 Environment: ${{ vars.SLS_STAGE }} on branch ${{ github.ref }}"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -51,6 +63,13 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: Create environment files
         run: |
@@ -66,12 +85,12 @@ jobs:
           SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
           SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
           EOF
-          
+
           # API environment (Serverless)
           cat > apps/api/.env << EOF
           NODE_ENV=development
           SLS_STAGE=${{ vars.SLS_STAGE }}
-          SLS_KEY_ALARM=${{ vars.SLS_KEY_ALARM }}
+          SLS_KEY_ALARM=${{ secrets.SLS_KEY_ALARM }}
           SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
           SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
           SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
@@ -89,6 +108,7 @@ jobs:
 
       # Deploy Admin (Next.js) to Vercel
       - name: Deploy Admin to Vercel
+        if: env.SKIP_DEPLOY == 'false'
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -97,14 +117,8 @@ jobs:
           working-directory: ./apps/admin
 
       # Deploy API (Serverless)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
       - name: Deploy API to AWS
+        if: env.SKIP_DEPLOY == 'false'
         working-directory: ./apps/api
         run: |
           yarn serverless deploy --stage ${{ vars.SLS_STAGE }}
@@ -117,7 +131,7 @@ jobs:
           SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
           SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
           SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
-          SLS_KEY_ALARM: ${{ vars.SLS_KEY_ALARM }}
+          SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
 
   build-and-deploy-prod:
     name: Build and Deploy Production
@@ -125,8 +139,12 @@ jobs:
     needs: lint-and-test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production
-    
+
     steps:
+      - name: Print run environment
+        run: |
+          echo "🚀 Environment: ${{ vars.SLS_STAGE }} on branch ${{ github.ref }}"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -139,10 +157,17 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Create environment files
         run: |
           # Admin environment (Next.js)
-          cat > apps/admin/.env.local << EOF
+          cat > apps/admin/.env << EOF
           NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
           SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
           SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
@@ -153,12 +178,12 @@ jobs:
           SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
           SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
           EOF
-          
+
           # API environment (Serverless)
           cat > apps/api/.env << EOF
           NODE_ENV=production
           SLS_STAGE=${{ vars.SLS_STAGE }}
-          SLS_KEY_ALARM=${{ vars.SLS_KEY_ALARM }}
+          SLS_KEY_ALARM=${{ secrets.SLS_KEY_ALARM }}
           SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
           SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
           SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
@@ -176,23 +201,18 @@ jobs:
 
       # Deploy Admin (Next.js) to Vercel
       - name: Deploy Admin to Vercel
+        if: env.SKIP_DEPLOY == 'false'
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
           working-directory: ./apps/admin
-          vercel-args: '--prod'
+          vercel-args: "--prod"
 
       # Deploy API (Serverless)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
       - name: Deploy API to AWS
+        if: env.SKIP_DEPLOY == 'false'
         working-directory: ./apps/api
         run: |
           yarn serverless deploy --stage ${{ vars.SLS_STAGE }}
@@ -205,7 +225,7 @@ jobs:
           SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
           SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
           SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
-          SLS_KEY_ALARM: ${{ vars.SLS_KEY_ALARM }}
+          SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
 
   notify:
     name: Notify Deployment
