@@ -31,6 +31,18 @@ export default function Home() {
           height={38}
           priority
         />
+        <h4>
+          NEXT_PUBLIC_RUN_ENVIRONMENT:{' '}
+          <span className={styles.success}>
+            {process.env.NEXT_PUBLIC_RUN_ENVIRONMENT || '-'}
+          </span>
+        </h4>
+        <h4>
+          NEXT_PUBLIC_JUST_ENV:{' '}
+          <span className={styles.success}>
+            {process.env.NEXT_PUBLIC_JUST_ENV || '-'}
+          </span>
+        </h4>
         <ol>
           <li>
             Get started by editing <code>apps/web/app/page.tsx</code>

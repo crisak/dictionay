@@ -17,5 +17,9 @@
     "**/node_modules/**": true,
     "**/dist/**": true,
     "**/.turbo/**": true
-  }
+  },
+  "conventionalCommits.scopes": [
+    "sls-api",
+    "admin"
+  ]
 }
