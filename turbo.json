@@ -4,18 +4,14 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"],
-      "env": [
-        "SLS_DB_USERNAME",
-        "SLS_DB_PASSWORD",
-        "SLS_DB_NAME",
-        "SLS_IA_API_KEY",
-        "SLS_IMG_ENDPOINT",
-        "SLS_IMG_ACCESS_KEY",
-        "SLS_GIF_ENDPOINT",
-        "SLS_GIF_API_KEY",
-        "SLS_KEY_ALARM"
-      ]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"]
+    },
+    "build:dev": {
+      "dependsOn": ["build"],
+      "persistent": true,
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]
