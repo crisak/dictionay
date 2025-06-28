@@ -4239,9 +4239,9 @@ axios-proxy-builder@^0.1.2:
     tunnel "^0.0.6"
 
 axios@^1.8.3:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.4.tgz#78990bb4bc63d2cae072952d374835950a82f447"
-  integrity sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.10.0.tgz#af320aee8632eaf2a400b6a1979fa75856f38d54"
+  integrity sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -10433,10 +10433,10 @@ serverless-offline@2.0.0:
     lodash.isplainobject "^4.0.3"
     velocityjs "^0.7.5"
 
-serverless@^4.12.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/serverless/-/serverless-4.12.0.tgz#7d4ea6502d0ea5cecb6f44c18390187662eedabd"
-  integrity sha512-uBMlkYjmuMf/E/4pi1rvzkibK+ypaWrgzD9+YnzLbDZbWuJngfFK0sPoaLZg2QF25xs/NZUDti4mUF5atGGDXg==
+serverless@^4.17.1:
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/serverless/-/serverless-4.17.1.tgz#6090f7c94a4ac3a331ec07adfee38cb0c1b1aea7"
+  integrity sha512-NzNzDtlAUt0nBf7keDYa/pC7qOO172oxbTqHIlylx9vBlrBU4lZQ772Bl+sdjvRjEfBf84K7GE4RXyFS4cXJxQ==
   dependencies:
     axios "^1.8.3"
     axios-proxy-builder "^0.1.2"
