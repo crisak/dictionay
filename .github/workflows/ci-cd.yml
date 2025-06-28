@@ -1,0 +1,223 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: "20.x"
+
+jobs:
+  lint-and-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run linting
+        run: yarn lint
+
+      - name: Run tests
+        run: yarn test
+
+  build-and-deploy-dev:
+    name: Build and Deploy Dev
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: development
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Create environment files
+        run: |
+          # Admin environment (Next.js)
+          cat > apps/admin/.env.local << EOF
+          NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
+          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
+          EOF
+          
+          # API environment (Serverless)
+          cat > apps/api/.env << EOF
+          NODE_ENV=development
+          SLS_STAGE=${{ vars.SLS_STAGE }}
+          SLS_KEY_ALARM=${{ vars.SLS_KEY_ALARM }}
+          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
+          EOF
+
+      - name: Build applications
+        run: yarn build
+        env:
+          NODE_ENV: development
+
+      # Deploy Admin (Next.js) to Vercel
+      - name: Deploy Admin to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
+          working-directory: ./apps/admin
+
+      # Deploy API (Serverless)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy API to AWS
+        working-directory: ./apps/api
+        run: |
+          yarn serverless deploy --stage ${{ vars.SLS_STAGE }}
+        env:
+          SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD: ${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME: ${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY: ${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT: ${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
+          SLS_KEY_ALARM: ${{ vars.SLS_KEY_ALARM }}
+
+  build-and-deploy-prod:
+    name: Build and Deploy Production
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Create environment files
+        run: |
+          # Admin environment (Next.js)
+          cat > apps/admin/.env.local << EOF
+          NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
+          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
+          EOF
+          
+          # API environment (Serverless)
+          cat > apps/api/.env << EOF
+          NODE_ENV=production
+          SLS_STAGE=${{ vars.SLS_STAGE }}
+          SLS_KEY_ALARM=${{ vars.SLS_KEY_ALARM }}
+          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
+          EOF
+
+      - name: Build applications
+        run: yarn build
+        env:
+          NODE_ENV: production
+
+      # Deploy Admin (Next.js) to Vercel
+      - name: Deploy Admin to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
+          working-directory: ./apps/admin
+          vercel-args: '--prod'
+
+      # Deploy API (Serverless)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy API to AWS
+        working-directory: ./apps/api
+        run: |
+          yarn serverless deploy --stage ${{ vars.SLS_STAGE }}
+        env:
+          SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD: ${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME: ${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY: ${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT: ${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
+          SLS_KEY_ALARM: ${{ vars.SLS_KEY_ALARM }}
+
+  notify:
+    name: Notify Deployment
+    runs-on: ubuntu-latest
+    needs: [build-and-deploy-dev, build-and-deploy-prod]
+    if: always() && github.event_name == 'push'
+
+    steps:
+      - name: Notify Success
+        if: (needs.build-and-deploy-dev.result == 'success' && github.ref == 'refs/heads/develop') || (needs.build-and-deploy-prod.result == 'success' && github.ref == 'refs/heads/main')
+        run: echo "✅ Deployment successful"
+
+      - name: Notify Failure
+        if: (needs.build-and-deploy-dev.result == 'failure' && github.ref == 'refs/heads/develop') || (needs.build-and-deploy-prod.result == 'failure' && github.ref == 'refs/heads/main')
+        run: echo "❌ Deployment failed"
