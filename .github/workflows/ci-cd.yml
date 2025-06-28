@@ -74,7 +74,7 @@ jobs:
       - name: Create environment files
         run: |
           # Admin environment (Next.js)
-          cat > apps/admin/.env.local << EOF
+          cat > apps/admin/.env << EOF
           NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
           SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
           SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
