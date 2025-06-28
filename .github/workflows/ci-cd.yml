@@ -87,7 +87,7 @@ jobs:
           EOF
 
           # API environment (Serverless)
-          cat > apps/api/.env << EOF
+          cat > apps/sls-api/.env << EOF
           NODE_ENV=development
           SLS_STAGE=${{ vars.SLS_STAGE }}
           SLS_KEY_ALARM=${{ secrets.SLS_KEY_ALARM }}
@@ -119,7 +119,7 @@ jobs:
       # Deploy API (Serverless)
       - name: Deploy API to AWS
         if: env.SKIP_DEPLOY == 'false'
-        working-directory: ./apps/api
+        working-directory: ./apps/sls-api
         run: |
           yarn serverless deploy --stage ${{ vars.SLS_STAGE }}
         env:
@@ -180,7 +180,7 @@ jobs:
           EOF
 
           # API environment (Serverless)
-          cat > apps/api/.env << EOF
+          cat > apps/sls-api/.env << EOF
           NODE_ENV=production
           SLS_STAGE=${{ vars.SLS_STAGE }}
           SLS_KEY_ALARM=${{ secrets.SLS_KEY_ALARM }}
@@ -213,7 +213,7 @@ jobs:
       # Deploy API (Serverless)
       - name: Deploy API to AWS
         if: env.SKIP_DEPLOY == 'false'
-        working-directory: ./apps/api
+        working-directory: ./apps/sls-api
         run: |
           yarn serverless deploy --stage ${{ vars.SLS_STAGE }}
         env:

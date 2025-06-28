@@ -1,5 +1,7 @@
 # Turborepo starter
 
+[![CI/CD Pipeline](https://github.com/crisak/dictionay/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/crisak/dictionay/actions/workflows/ci-cd.yml)
+
 This Turborepo starter is maintained by the Turborepo core team.
 
 ## Using this example
