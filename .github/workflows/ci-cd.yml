@@ -102,6 +102,9 @@ jobs:
           SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
           EOF
 
+      - name: Authenticate with Serverless
+        run: |
+          echo ${{ secrets.SERVERLESS_ACCESS_KEY }} | serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Build applications
         run: yarn build:dev
         env:
