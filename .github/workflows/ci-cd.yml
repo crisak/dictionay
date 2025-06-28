@@ -145,6 +145,7 @@ jobs:
           yarn build:dev
         env:
           NODE_ENV: development
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
 
   deploy-dev:
     name: Deploy Dev
