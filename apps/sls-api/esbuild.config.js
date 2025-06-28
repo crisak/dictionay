@@ -1,4 +1,4 @@
-const config = (serverless) => {
+const config = () => {
   /** @type {import('esbuild').BuildOptions} */
   const config = {
     // Enable or Disable bundling the function code and dependencies into a single file. (Default: true)

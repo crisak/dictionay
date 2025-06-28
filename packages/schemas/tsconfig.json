@@ -3,9 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@repo/schemas/*": ["./src/*"]
+      "@repo/schemas/*": ["./src/*"],
+      "@repo/schemas": ["./src/index.ts"]
     }
   },
-  "include": ["./src/*.ts", "./src/**/*.ts"],
+  "include": ["."],
   "exclude": ["node_modules", "dist"]
 }

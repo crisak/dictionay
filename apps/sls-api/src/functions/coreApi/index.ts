@@ -1,5 +1,4 @@
 import SLSUtil from '../../utils/SLSUtil'
-import type { FunctionDefinitionHandler } from 'serverless'
 
 export default {
   handler: `${SLSUtil.handlerPath(__dirname)}/handler.main`,
@@ -64,5 +63,11 @@ export default {
         private: true,
       },
     },
+    {
+      http: {
+        method: 'GET',
+        path: '/v1/health',
+      },
+    },
   ],
-} as FunctionDefinitionHandler
+}

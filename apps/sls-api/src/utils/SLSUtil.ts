@@ -41,7 +41,11 @@ type TypeResource =
 
 export default class SLSUtil {
   static handlerPath(context: string) {
-    return `${context.split(process.cwd())[1].substring(1).replace(/\\/g, '/')}`
+    const parts = context.split(process?.cwd() ?? '')
+    if (parts[1]) {
+      return `${parts[1].substring(1).replace(/\\/g, '/')}`
+    }
+    return context.replace(/\\/g, '/')
   }
 
   static getKeysFromJson(pathName: string): Array<string> {
@@ -56,10 +60,12 @@ export default class SLSUtil {
     }
 
     const libs = Object.keys(packageJson.dependencies)
-    const dependencies = libs.map((lib) => {
-      const [rootLib] = lib.split('/')
-      return rootLib
-    })
+    const dependencies = libs
+      .map((lib) => {
+        const [rootLib] = lib.split('/')
+        return rootLib
+      })
+      .filter((dep): dep is string => typeof dep === 'string' && dep.length > 0)
 
     return dependencies
   }

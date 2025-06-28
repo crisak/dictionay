@@ -1,13 +1,30 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable @typescript-eslint/no-namespace */
-
 import * as functions from './src/functions'
+import type { Serverless } from 'serverless/aws'
 
 const environment = {
   USERS_TABLE: '${param:tableName}',
+} as const
+
+interface ServerlessConfig extends Partial<Serverless> {
+  org?: string
+  app?: string
+  service: string
+  stages?: {
+    default: {
+      params: Record<string, string>
+    }
+  }
+  plugins?: string[]
+  build?: {
+    esbuild?: {
+      configFile?: string
+    }
+  }
 }
 
-const serverlessConfig = {
+const serverlessConfig: ServerlessConfig = {
   org: 'crisak',
   app: 'dictionary-app',
   service: 'dictionary',
@@ -27,6 +44,7 @@ const serverlessConfig = {
   provider: {
     name: 'aws',
     runtime: 'nodejs20.x',
+    profile: 'crisak',
     // enable API to API Gataway a observability
     tracing: {
       apiGateway: true,
@@ -106,6 +124,13 @@ type LambdaVariables = Record<KeysVariables, string>
 
 declare global {
   namespace NodeJS {
+    interface Global {
+      dictionary: {
+        auth: {
+          id: string
+        }
+      }
+    }
     interface ProcessEnv extends LambdaVariables {}
   }
 }

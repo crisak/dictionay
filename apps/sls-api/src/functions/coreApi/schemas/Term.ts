@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-// Definición de subschemas reutilizables
 const languageCodeSchema = z.string().length(2).toLowerCase()
 
 const pronunciationSchema = z.object({
@@ -61,48 +60,4 @@ export const termSchema = z.object({
   updatedAt: z.string(),
 })
 
-// Tipo inferido de Zod
 export type Term = z.infer<typeof termSchema>
-
-const exampleTerm: Term = {
-  _id: '60f4b6c3c9e6d4e5c4a9e7d1',
-  srcLanguage: 'en',
-  types: ['verb'],
-  level: 'a1',
-  toLanguage: 'es',
-  isSentence: false,
-  term: 'get',
-  translation: 'conseguir',
-  pronunciation: {
-    phonetic: 'gɛt',
-    nativePhonetic: 'guet',
-    nativePhoneticDetails:
-      "Para ser más específico: La 'g' es suave como en \"gato\", la 'e' es corta como en \"mesa\", la 't' final es una t suave, casi sin soltar el aire.",
-  },
-  examples: [
-    {
-      sentence: 'We need to get some beer somewhere.',
-      sentenceNative: 'Tenemos que conseguir cerveza en alguna parte.',
-    },
-  ],
-  tags: ['verb', 'common', 'irregular'],
-
-  image: '',
-  audio: '',
-
-  dictionary: [
-    {
-      type: 'verb',
-      baseTerm: 'get',
-      entries: [
-        {
-          translation: 'obtener',
-          reverseTranslation: ['get', 'obtain', 'earn', 'secure'],
-        },
-      ],
-    },
-  ],
-
-  createdAt: new Date('2021-07-19T00:00:00Z').toISOString(),
-  updatedAt: new Date('2021-07-19T00:00:00Z').toISOString(),
-}

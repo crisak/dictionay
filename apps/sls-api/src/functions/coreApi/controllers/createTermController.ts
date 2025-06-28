@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios from 'axios'
 import { Binary, MongoClient, ObjectId, ServerApiVersion } from 'mongodb'
 import { CONFIG } from '../utils'
@@ -196,6 +197,7 @@ export async function createTermController(body: CreateTermDto) {
     .db(CONFIG.dbName)
     .collection(CONFIG.cl.userTerms)
 
+  // @ts-ignore
   const auth = global.dictionary.auth
 
   const userTerm: DB.UserTerm = {

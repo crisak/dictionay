@@ -1,7 +1,7 @@
 {
   "name": "sls-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Serverless Framework API for App",
   "type": "module",
   "scripts": {
     "test": "TZ=UTC jest --maxWorkers=1",

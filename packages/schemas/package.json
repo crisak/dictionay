@@ -2,8 +2,9 @@
   "name": "@repo/schemas",
   "version": "1.0.0",
   "description": "Schemas for App",
+  "type": "module",
+  "private": true,
   "exports": {
-    ".": "./src/index.ts",
     "./*": "./src/*.ts"
   },
   "dependencies": {

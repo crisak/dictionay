@@ -1,14 +1,13 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 
 interface CustomError extends Error {
   statusCode?: number
-  details?: any
+  details?: unknown
 }
 export const errorHandler = (
   error: CustomError,
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
   const statusCode = error.statusCode || 500
 
