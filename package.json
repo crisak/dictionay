@@ -2,11 +2,12 @@
   "name": "dictionary",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "turbo run format",
-    "check-types": "turbo run check-types"
+    "build:dev": "turbo run build --filter='!sls-api-legacy'",
+    "build": "turbo run build --filter='!sls-api-legacy'",
+    "dev": "turbo run dev --filter='!sls-api-legacy'",
+    "lint": "turbo run lint --filter='!sls-api-legacy'",
+    "format": "turbo run format --filter='!sls-api-legacy'",
+    "check-types": "turbo run check-types --filter='!sls-api-legacy'"
   },
   "devDependencies": {
     "turbo": "^2.5.0",

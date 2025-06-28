@@ -7,7 +7,7 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"]
     },
     "build:dev": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build:dev"],
       "persistent": true,
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
