@@ -1,5 +1,11 @@
 /* eslint-disable no-console */
-export const logger = () => ({
+import type { MiddlewareObj } from '@middy/core'
+import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+
+export const logger = (): MiddlewareObj<
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult
+> => ({
   before: (handler) => {
     const request = handler.event
 

@@ -3,7 +3,15 @@ import { CONFIG } from '../../utils'
 import { TranslateResultDto } from './type'
 
 export default class TranslateApi {
-  static async text({ sourceLanguage = 'en', toLanguage = 'es', text }) {
+  static async text({
+    sourceLanguage = 'en',
+    toLanguage = 'es',
+    text,
+  }: {
+    sourceLanguage?: string
+    toLanguage?: string
+    text: string
+  }) {
     const queryParams = {
       'params.client': 'gtx',
       'query.source_language': sourceLanguage,
@@ -100,6 +108,10 @@ export default class TranslateApi {
     sourceLanguage = 'en',
     voiceSpeed = 1,
     text,
+  }: {
+    sourceLanguage?: string
+    voiceSpeed?: number
+    text: string
   }): Promise<string> {
     const queryParams = {
       client: 'gtx',
@@ -173,14 +185,19 @@ export default class TranslateApi {
     return `${colombiaTime} Pong`
   }
 
-  static buildQueryStrings(params) {
+  static buildQueryStrings(
+    params: Record<
+      string,
+      string | number | boolean | Array<string | number | boolean>
+    >,
+  ) {
     const searchParams = new URLSearchParams()
 
     // Agregar los parámetros
     Object.entries(params).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         // Si el valor es un array, agregar múltiples entradas
-        value.forEach((item) => searchParams.append(key, item))
+        value.forEach((item) => searchParams.append(key, String(item)))
       } else {
         searchParams.append(key, String(value))
       }

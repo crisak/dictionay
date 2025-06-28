@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios from 'axios'
 import { Binary, MongoClient, ObjectId, ServerApiVersion } from 'mongodb'
@@ -324,7 +325,7 @@ Ensure all fields are filled correctly and provide natural, contextual examples.
 /**
  * @deprecated
  */
-async function fetchSearchImage(term) {
+export async function fetchSearchImage(term: string) {
   const splitWordsBySpace = term.split(/\s+/) || []
   if (!term || splitWordsBySpace.length > 4) {
     return null
@@ -357,7 +358,7 @@ async function fetchSearchImage(term) {
  * @returns {Promise<Buffer | null>}
  * @deprecated
  */
-async function downloadImage(url) {
+export async function downloadImage(url: string) {
   return axios
     .request({
       method: 'get',
