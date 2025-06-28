@@ -97,13 +97,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-optional
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
       - name: Create environment files
         run: |
           # Admin environment (Next.js)
@@ -142,6 +135,9 @@ jobs:
         env:
           NODE_ENV: development
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 
   deploy-dev:
     name: Deploy Dev
@@ -215,7 +211,9 @@ jobs:
         if: env.SKIP_DEPLOY == 'false'
         working-directory: ./apps/sls-api
         run: |
-          yarn serverless deploy --stage ${{ vars.SLS_STAGE }}
+          ls -la
+          cat .env
+          yarn deploy:dev
         env:
           SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
           SLS_DB_PASSWORD: ${{ secrets.SLS_DB_PASSWORD }}
