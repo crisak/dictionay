@@ -133,10 +133,6 @@ jobs:
           SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
           SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
           SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
-
-          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           EOF
 
       - name: Build applications
@@ -205,19 +201,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           EOF
 
-      - name: Build applications
-        run: |
-          yarn serverless login
-          yarn build:dev
-
-        env:
-          NODE_ENV: development
-          env:
-          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      # Deploy Admin (Next.js) to Vercel
       - name: Deploy Admin to Vercel
         if: env.SKIP_DEPLOY == 'false'
         uses: amondnet/vercel-action@v25
@@ -341,14 +324,14 @@ jobs:
   notify:
     name: Notify Deployment
     runs-on: ubuntu-latest
-    needs: [build-dev, build-and-deploy-prod]
+    needs: [deploy-dev, build-and-deploy-prod]
     if: always() && github.event_name == 'push'
 
     steps:
       - name: Notify Success
-        if: (needs.build-and-deploy-dev.result == 'success' && github.ref == 'refs/heads/develop') || (needs.build-and-deploy-prod.result == 'success' && github.ref == 'refs/heads/main')
+        if: (needs.deploy-dev.result == 'success' && github.ref == 'refs/heads/develop') || (needs.build-and-deploy-prod.result == 'success' && github.ref == 'refs/heads/main')
         run: echo "✅ Deployment successful"
 
       - name: Notify Failure
-        if: (needs.build-and-deploy-dev.result == 'failure' && github.ref == 'refs/heads/develop') || (needs.build-and-deploy-prod.result == 'failure' && github.ref == 'refs/heads/main')
+        if: (needs.deploy-dev.result != 'success' && github.ref == 'refs/heads/develop') || (needs.build-and-deploy-prod.result != 'success' && github.ref == 'refs/heads/main')
         run: echo "❌ Deployment failed"
