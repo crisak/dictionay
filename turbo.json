@@ -1,0 +1,39 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"],
+      "env": [
+        "SLS_DB_USERNAME",
+        "SLS_DB_PASSWORD",
+        "SLS_DB_NAME",
+        "SLS_IA_API_KEY",
+        "SLS_IMG_ENDPOINT",
+        "SLS_IMG_ACCESS_KEY",
+        "SLS_GIF_ENDPOINT",
+        "SLS_GIF_API_KEY",
+        "SLS_KEY_ALARM"
+      ]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "format": {
+      "dependsOn": ["^format"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test": {
+      "dependsOn": ["^test"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    }
+  }
+}

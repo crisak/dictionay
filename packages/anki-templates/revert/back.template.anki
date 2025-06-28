@@ -1,0 +1,128 @@
+<section class="card-container card-back">
+  <div class="main-content">
+    {{#Image}}
+    <div class="image-container image-container-back">
+      <img
+        src="data:image/png;base64,{{Image}}"
+        class="drawing"
+        alt="{{Front}}"
+      />
+    </div>
+    {{/Image}}
+
+    <div class="term-section">
+      <div class="term-container">
+        <div class="term-header">
+          <!-- {{#Audio}}
+                    <div class="audio-wrapper">
+                        <audio src="data:audio/mpeg;base64,{{Audio}}" autoplay></audio>
+                        <button class="audio-btn" onclick="this.previousElementSibling.play()">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
+                                fill="#98ca3f">
+                                <path
+                                    d="M552-152v-75q86-23 139-93.26 53-70.25 53-159.5 0-89.24-53.5-158.74Q637-708 552-734v-75q116 25 190 117t74 211q0 119-73.5 211.5T552-152ZM144-385v-192h144l192-192v576L288-385H144Zm408 55v-302q45.12 20.4 70.56 61.2Q648-530 648-480.52q0 48.52-25.44 89.23Q597.12-350.59 552-330ZM408-595l-90 90H216v48h102l90 90v-228Zm-91 113Z" />
+                            </svg>
+                        </button>
+                    </div>
+                    {{/Audio}} -->
+          <div class="term-text">{{Back}}</div>
+        </div>
+
+        <!-- Columna Derecha -->
+        <!-- {{#Phonetic}}
+                <div class="right-column">
+                    <div class="phonetics-container">
+                        <div class="phonetics-grid">
+                            <div class="phonetic-item">
+                                <span class="phonetic">{{Phonetic}}</span>
+                            </div>
+                            {{#PhoneticNative}}
+                            <div class="phonetic-item">
+                                <span class="phonetic-native">{{PhoneticNative}}</span>
+                            </div>
+                            {{/PhoneticNative}} {{#PhoneticNativeDetails}}
+                            <div class="phonetic-details">
+                                <span class="phonetic-native-details">{{PhoneticNativeDetails}}</span>
+                            </div>
+                            {{/PhoneticNativeDetails}}
+                        </div>
+                    </div>
+                </div>
+                {{/Phonetic}} -->
+      </div>
+    </div>
+
+    <div class="answer-section">
+      <!-- <div class="translation">
+                <div class="translation-text">
+                    {{Back}} <span class="word-type">{{Type}}</span>
+                </div>
+            </div> -->
+
+      <div class="term">
+        <div class="term-header">
+          {{#Audio}}
+          <div class="audio-wrapper">
+            <audio src="data:audio/mpeg;base64,{{Audio}}"></audio>
+            <button
+              class="audio-btn"
+              onclick="this.previousElementSibling.play()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="20px"
+                viewBox="0 -960 960 960"
+                width="20px"
+                fill="#98ca3f"
+              >
+                <path
+                  d="M552-152v-75q86-23 139-93.26 53-70.25 53-159.5 0-89.24-53.5-158.74Q637-708 552-734v-75q116 25 190 117t74 211q0 119-73.5 211.5T552-152ZM144-385v-192h144l192-192v576L288-385H144Zm408 55v-302q45.12 20.4 70.56 61.2Q648-530 648-480.52q0 48.52-25.44 89.23Q597.12-350.59 552-330ZM408-595l-90 90H216v48h102l90 90v-228Zm-91 113Z"
+                />
+              </svg>
+            </button>
+          </div>
+          {{/Audio}}
+          <div class="term-text">{{Front}}</div>
+        </div>
+
+        <!-- Columna Derecha -->
+        {{#Phonetic}}
+        <div class="right-column mb-2xl">
+          <details class="phonetics-container">
+            <summary class="phonetic">
+              {{Phonetic}} {{#PhoneticNative}}
+              <span class="phonetic-native">{{PhoneticNative}} </span>
+              {{/PhoneticNative}}
+            </summary>
+            {{#PhoneticNativeDetails}}
+            <div class="phonetic-details p-xs">
+              <span class="phonetic-native-details">
+                {{PhoneticNativeDetails}}</span
+              >
+            </div>
+            {{/PhoneticNativeDetails}}
+          </details>
+        </div>
+        {{/Phonetic}}
+      </div>
+
+      {{#Example}}
+      <div class="example-container">
+        <div class="alternatives-title">Example:</div>
+        <div class="example">{{Example}}</div>
+
+        {{#ExampleNative}}
+        <div class="example-native">{{ExampleNative}}</div>
+        {{/ExampleNative}}
+      </div>
+      {{/Example}} {{#AlternativesNative}}
+      <div class="example-separator"></div>
+      {{/AlternativesNative}} {{#AlternativesNative}}
+      <div class="alternatives">
+        <div class="alternatives-title">Alternative Translations:</div>
+        <div class="alternatives-content">{{AlternativesNative}}</div>
+      </div>
+      {{/AlternativesNative}}
+    </div>
+  </div>
+</section>

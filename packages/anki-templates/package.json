@@ -1,0 +1,10 @@
+{
+  "name": "@repo/anki-templates",
+  "exports": {
+    "./revert/*": "./revert/*",
+    "./normal/*": "./normal/*"
+  },
+  "version": "0.0.1",
+  "type": "module",
+  "private": true
+}

@@ -1,0 +1,192 @@
+{
+  "landing": {
+    "brand": "FinanceTracker",
+    "nav": {
+      "features": "Recursos",
+      "technology": "Tecnologia",
+      "pricing": "Preços",
+      "roadmap": "Roteiro",
+      "signIn": "Entrar",
+      "getStarted": "Começar"
+    },
+    "hero": {
+      "badge": "Agora em Beta",
+      "title": "Gestão Financeira Inteligente para Todos",
+      "subtitle": "Registre despesas, analise padrões e tome o controle das suas finanças com nosso aplicativo poderoso e simples",
+      "startTrial": "Iniciar Teste Gratuito",
+      "viewDemo": "Ver Demonstração",
+      "noCard": "Não é necessário cartão de crédito"
+    },
+    "features": {
+      "title": "O Que Nos Diferencia",
+      "subtitle": "Nosso rastreador financeiro combina recursos poderosos com simplicidade para oferecer a melhor experiência",
+      "sheets": "Integração com Google Sheets",
+      "sheetsDesc": "Interface familiar de planilha com sincronização poderosa na nuvem",
+      "pwa": "Aplicativo Web Progressivo",
+      "pwaDesc": "Instale em qualquer dispositivo e use como um aplicativo nativo com capacidades offline",
+      "offline": "Prioridade Offline",
+      "offlineDesc": "Trabalhe sem internet e sincronize automaticamente quando você estiver online novamente",
+      "multimodal": "Entrada Multimodal",
+      "multimodalDesc": "Adicione transações por voz, fotos ou texto para máxima comodidade"
+    },
+    "tabs": {
+      "title": "Recursos Poderosos em Cada Etapa",
+      "subtitle": "Desde funcionalidade básica até recursos avançados de IA, temos você coberto",
+      "core": "Recursos Básicos",
+      "enhanced": "Recursos Aperfeiçoados",
+      "advanced": "Recursos Avançados",
+      "coreTitle": "Recursos Financeiros Básicos",
+      "coreDesc": "Tudo o que você precisa para começar a rastrear suas finanças",
+      "enhancedTitle": "Recursos Aperfeiçoados",
+      "enhancedDesc": "Leve sua gestão financeira ao próximo nível",
+      "advancedTitle": "Recursos Avançados de IA",
+      "advancedDesc": "Capacidades de IA de ponta para uma gestão financeira sem esforço"
+    },
+    "coreFeatures": {
+      "transactions": "Gestão de Transações",
+      "transactionsDesc": "Rastreamento de receitas e despesas com categorização detalhada",
+      "sync": "Sincronização com Google Sheets",
+      "syncDesc": "Sincronização em tempo real com Google Sheets",
+      "auth": "Autenticação Segura",
+      "authDesc": "Integração com Google OAuth2 para acesso seguro",
+      "dashboard": "Painel Básico",
+      "dashboardDesc": "Resumo mensal com métricas financeiras essenciais"
+    },
+    "enhancedFeatures": {
+      "import": "Importação em Massa CSV",
+      "importDesc": "Importe histórico de transações do seu banco ou de outros aplicativos",
+      "offline": "Capacidades Offline",
+      "offlineDesc": "Trabalhe sem internet e sincronize quando você estiver online novamente",
+      "analytics": "Análise Avançada",
+      "analyticsDesc": "Relatórios visuais com filtragem por data e categoria",
+      "pwa": "Instalação PWA",
+      "pwaDesc": "Instale em qualquer dispositivo e use como um aplicativo nativo"
+    },
+    "advancedFeatures": {
+      "ocr": "Digitalização OCR de Recibos",
+      "ocrDesc": "Extraia automaticamente detalhes de transações de fotos",
+      "voice": "Voz para Texto",
+      "voiceDesc": "Adicione transações apenas falando com seu dispositivo",
+      "categories": "Categorização Inteligente",
+      "categoriesDesc": "Sugestões implicações por IA para categorias de transações",
+      "budget": "Automação de Orçamento",
+      "budgetDesc": "Alertas inteligentes e notificações de limite de gastos"
+    },
+    "technology": {
+      "title": "Construído com Tecnologia Moderna",
+      "subtitle": "Nosso aplicativo aproveita tecnologias de ponta para desempenho, confiabilidade e segurança"
+    },
+    "pricing": {
+      "title": "Preços Simples e Transparentes",
+      "subtitle": "Escolha o plano que melhor atenda às suas necessidades financeiras",
+      "free": "Grátis",
+      "freeDesc": "Para uso pessoal básico",
+      "freePrice": "R$ 0",
+      "freeFreq": "Para sempre",
+      "premium": "Premium",
+      "premiumDesc": "Para indivíduos e famílias",
+      "premiumPrice": "R$ 9,99",
+      "premiumFreq": "por mês",
+      "business": "Negócios",
+      "businessDesc": "Para pequenas empresas",
+      "businessPrice": "R$ 24,99",
+      "businessFreq": "por mês",
+      "popular": "Popular",
+      "getStarted": "Começar",
+      "startTrial": "Iniciar Teste Gratuito",
+      "contactSales": "Contatar Vendas"
+    },
+    "pricingFeatures": {
+      "free": {
+        "core": "Recursos financeiros básicos",
+        "transactions": "Até 100 transações/mês",
+        "dashboard": "Painel básico",
+        "sheets": "Integração com Google Sheets"
+      },
+      "premium": {
+        "free": "Todos os recursos gratuitos",
+        "unlimited": "Transações ilimitadas",
+        "analytics": "Análise avançada",
+        "import": "Importações em massa CSV",
+        "offline": "Capacidades offline"
+      },
+      "business": {
+        "premium": "Todos os recursos premium",
+        "multiuser": "Acesso multiusuário",
+        "ai": "Recursos implicações por IA",
+        "support": "Suporte prioritário",
+        "reporting": "Relatórios avançados"
+      }
+    },
+    "roadmap": {
+      "title": "Roteiro de Desenvolvimento",
+      "subtitle": "Nossa jornada para construir o aplicativo definitivo de rastreamento financeiro",
+      "core": "Funcionalidade Básica",
+      "coreDesc": "Configuração de infraestrutura, sistema de autenticação, recursos financeiros básicos e fundamentos de UI",
+      "enhanced": "Recursos Aperfeiçoados",
+      "enhancedDesc": "Gestão de dados, análise avançada e experiência do usuário aprimorada com capacidades PWA",
+      "advanced": "Recursos Avançados",
+      "advancedDesc": "Recursos de IA, controles financeiros e sistemas de notificação para uma experiência financeira completa"
+    },
+    "cta": {
+      "title": "Pronto para Tomar o Controle das Suas Finanças?",
+      "subtitle": "Junte-se a milhares de usuários que já estão gerenciando suas finanças de maneira mais eficaz",
+      "startTrial": "Iniciar Teste Gratuito",
+      "learnMore": "Saiba Mais"
+    },
+    "testimonials": {
+      "title": "O Que Nossos Usuários Dizem",
+      "subtitle": "Não acredite apenas em nossa palavra. Veja o que nossos usuários têm a dizer",
+      "user1": {
+        "name": "Sarah J.",
+        "type": "Usuário Premium",
+        "quote": "Este aplicativo transformou completamente a maneira como eu gerencio minhas finanças. A integração com Google Sheets é brilhante, e as capacidades offline significam que posso atualizar meus gastos em qualquer lugar."
+      },
+      "user2": {
+        "name": "Michael T.",
+        "type": "Usuário Empresarial",
+        "quote": "Os recursos de IA são revolucionários. Poder escanear recibos e tê-los categorizados automaticamente me economiza horas a cada semana. Vale cada centavo para o meu pequeno negócio."
+      },
+      "user3": {
+        "name": "Elena R.",
+        "type": "Usuário Gratuito",
+        "quote": "Mesmo a versão gratuita tem tudo o que preciso para rastrear minhas finanças pessoais. A interface é intuitiva e a experiência móvel é impecável."
+      }
+    },
+    "footer": {
+      "rights": "Todos os direitos reservados",
+      "terms": "Termos",
+      "privacy": "Privacidade",
+      "contact": "Contato"
+    }
+  },
+  "login": {
+    "welcome": "Bem-vindo de volta",
+    "description": "Faça login com sua conta do Apple ou Google",
+    "loginWithApple": "Login com Apple (em breve)",
+    "loginWithGoogle": "Login com Google (em breve)",
+    "orContinueWith": "Ou continue com",
+    "email": "Email",
+    "password": "Senha",
+    "passwordDescription": "Sua senha deve ter pelo menos 8 caracteres",
+    "forgotPassword": "Esqueceu sua senha? (em breve)",
+    "loginButton": "Login",
+    "noAccount": "Não tem uma conta?",
+    "signUp": "Cadastre-se (em breve)",
+    "termsAndPrivacy": "Ao clicar em continuar, você concorda com nossos {termsLink} e {privacyLink}.",
+    "termsLink": "Termos de Serviço",
+    "privacyLink": "Política de Privacidade"
+  },
+  "backend": {
+    "error": {
+      "generic": "Ocorreu um erro. Por favor, tente novamente.",
+      "network": "Erro de rede. Por favor, verifique sua conexão.",
+      "timeout": "Solicitação expirou. Por favor, tente novamente mais tarde.",
+      "unauthorized": "Acesso não autorizado. Por favor, faça login novamente.",
+      "notFound": "Recurso não encontrado. Por favor, verifique a URL.",
+      "PDP01": "Email ou senha inválidos. Por favor, tente novamente.",
+      "GENERAL": "Ocorreu um erro. Por favor, tente novamente.",
+      "GENERAL_WITH_EXCEPTION": "Ocorreu um erro: {exception}. Por favor, tente novamente."
+    }
+  }
+}

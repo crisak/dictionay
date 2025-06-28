@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "PolyReader",
+  "description": "An interactive dictionary and language learning tool to enhance your multilingual reading experience.",
+  "version": "1.0",
+  "options_page": "app/options.html",
+  "action": {
+    "default_popup": "app/popup-top.html"
+  },
+  "permissions": ["contextMenus", "storage", "activeTab"],
+  "background": {
+    "service_worker": "content/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file://*/*",
+        "ftp://*/*",
+        "https://www.google.com/*",
+        "https://klesy70570.execute-api.us-east-1.amazonaws.com/dev/*"
+      ],
+      "js": ["content/content.js"]
+    }
+  ],
+  "commands": {
+    "save-word": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E",
+        "linux": "Ctrl+Shift+E"
+      },
+      "description": "Save selected word"
+    }
+  },
+  "icons": {
+    "16": "app/icon16.png",
+    "48": "app/icon48.png",
+    "128": "app/icon128.png"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@repo/schemas",
+  "version": "1.0.0",
+  "description": "Schemas for App",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/prettier-config": "*",
+    "@repo/typescript-config": "*"
+  }
+}

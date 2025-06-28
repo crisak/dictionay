@@ -1,0 +1,49 @@
+{
+  "name": "sls-api",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "TZ=UTC jest --maxWorkers=1",
+    "lint": "eslint .",
+    "deploy:layer": "bash ./scripts/layers/pub-layer.sh",
+    "/** DEV */": "",
+    "dev": "sls offline start --stage dev --verbose --noAuth",
+    "build": "sls package --stage dev",
+    "build:dev": "sls package --stage dev",
+    "deploy:dev": "sls deploy --stage dev --verbose",
+    "deploy:function:dev": "sls deploy function --stage dev --verbose -f",
+    "/** PROD */": "",
+    "prod": "PNP_FLOW=ENV_PROD_APP sls offline start --stage prod",
+    "build:main": "PNP_FLOW=ENV_PROD_APP sls package --stage prod --verbose",
+    "deploy:prod": "PNP_FLOW=ENV_PROD_APP sls deploy --stage prod --verbose",
+    "deploy:function:prod": "PNP_FLOW=ENV_PROD_APP sls deploy function --stage prod --verbose -f"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.1",
+    "@aws-sdk/client-dynamodb": "^3.585.0",
+    "@aws-sdk/lib-dynamodb": "^3.585.0",
+    "@middy/core": "^6.1.6",
+    "@middy/http-cors": "^6.1.6",
+    "@middy/http-error-handler": "^6.1.6",
+    "@middy/http-header-normalizer": "^6.1.6",
+    "@middy/http-json-body-parser": "^6.1.6",
+    "@middy/http-router": "^6.1.6",
+    "@repo/schemas": "*",
+    "middy-zod-validator": "^3.0.4",
+    "mongodb": "^6.16.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/prettier-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/aws-lambda": "^8.10.149",
+    "@types/express": "^5.0.1",
+    "@types/node": "*",
+    "@types/serverless": "^3.12.27",
+    "serverless": "^4.12.0",
+    "serverless-dotenv-plugin": "^6.0.0"
+  },
+  "license": "MIT"
+}

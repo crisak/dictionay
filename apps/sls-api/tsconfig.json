@@ -1,0 +1,13 @@
+{
+  "extends": "@repo/typescript-config/back-api.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "moduleResolution": "NodeNext",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["src/*.ts", "src/**/*/.ts"]
+}

@@ -1,0 +1,7 @@
+node_modules
+.vscode-test
+.vscode
+.vscodeignore
+.vscode-test
+.vscode-test-*
+*.code-search

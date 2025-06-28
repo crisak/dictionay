@@ -1,0 +1,30 @@
+{
+  "name": "@repo/test-config",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./server": "./server.js",
+    "./setup/*": "./setup/*.js"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/prettier-config": "*",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^3.1.1",
+    "@vitest/ui": "^3.1.1",
+    "jsdom": "^26.1.0",
+    "vitest": "^3.1.1"
+  },
+  "peerDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "vitest": "^3.1.1"
+  },
+  "optionalDependencies": {
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}

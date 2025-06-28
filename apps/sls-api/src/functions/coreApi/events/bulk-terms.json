@@ -1,0 +1,20 @@
+{
+  "httpMethod": "POST",
+  "path": "/transactions/bulk",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "[{\"amount\":\"a25.5\",\"description\":\"Grocery shopping at Whole Foods\",\"type\":\"expense\",\"categoryId\":\"cat-food\",\"paymentMethodId\":\"pm-creditcard\",\"date\":\"2025-04-10T14:30:00.000Z\"},{\"amount\":2500,\"description\":\"Monthly salary deposit\",\"type\":\"income\",\"categoryId\":\"cat-salary\",\"paymentMethodId\":\"pm-banktransfer\",\"date\":\"2025-04-01T09:00:00.000Z\"},{\"amount\":45.99,\"description\":\"Dinner at Italian restaurant\",\"type\":\"expense\",\"categoryId\":\"cat-dining\",\"paymentMethodId\":\"pm-debitcard\",\"date\":\"2025-04-12T20:15:00.000Z\"},{\"amount\":75,\"description\":\"Monthly gym membership\",\"type\":\"expense\",\"categoryId\":\"cat-fitness\",\"paymentMethodId\":\"pm-creditcard\",\"date\":\"2025-04-15T18:20:00.000Z\"},{\"amount\":150,\"description\":\"Freelance web design project\",\"type\":\"income\",\"categoryId\":\"cat-freelance\",\"paymentMethodId\":\"pm-paypal\",\"date\":\"2025-04-08T12:45:00.000Z\"},{\"amount\":85.25,\"description\":\"Online shopping - new headphones\",\"type\":\"expense\",\"categoryId\":\"cat-shopping\",\"paymentMethodId\":\"pm-creditcard\",\"date\":\"2025-04-14T10:30:00.000Z\"},{\"amount\":35,\"description\":\"Gas station fill-up\",\"type\":\"expense\",\"categoryId\":\"cat-transport\",\"paymentMethodId\":\"pm-debitcard\",\"date\":\"2025-04-16T09:45:00.000Z\"},{\"amount\":195.75,\"description\":\"Monthly internet and cable bill\",\"type\":\"expense\",\"categoryId\":\"cat-utilities\",\"paymentMethodId\":\"pm-banktransfer\",\"date\":\"2025-04-05T16:20:00.000Z\"},{\"amount\":50,\"description\":\"Birthday gift from mom\",\"type\":\"income\",\"categoryId\":\"cat-gifts\",\"paymentMethodId\":\"pm-cash\",\"date\":\"2025-04-11T14:00:00.000Z\"},{\"amount\":950,\"description\":\"Monthly rent payment\",\"type\":\"expense\",\"categoryId\":\"cat-housing\",\"paymentMethodId\":\"pm-banktransfer\",\"date\":\"2025-04-03T11:30:00.000Z\"}]",
+  "isBase64Encoded": false,
+  "requestContext": {
+    "httpMethod": "POST",
+    "path": "/transactions/bulk",
+    "requestId": "12345",
+    "resourceId": "67890",
+    "resourcePath": "/transaction",
+    "identity": {
+      "sourceIp": "234.2.3.23.123",
+      "userAgent": "PostmanRuntime/7.28.4"
+    }
+  }
+}

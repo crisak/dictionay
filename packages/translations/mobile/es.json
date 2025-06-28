@@ -1,0 +1,192 @@
+{
+  "landing": {
+    "brand": "FinanceTracker",
+    "nav": {
+      "features": "Características",
+      "technology": "Tecnología",
+      "pricing": "Precios",
+      "roadmap": "Hoja de Ruta",
+      "signIn": "Iniciar Sesión",
+      "getStarted": "Comenzar"
+    },
+    "hero": {
+      "badge": "Ahora en Beta",
+      "title": "Gestión Financiera Inteligente para Todos",
+      "subtitle": "Registra gastos, analiza patrones y toma el control de tus finanzas con nuestra aplicación potente y sencilla",
+      "startTrial": "Comenzar Prueba Gratuita",
+      "viewDemo": "Ver Demo",
+      "noCard": "No se requiere tarjeta de crédito"
+    },
+    "features": {
+      "title": "Lo Que Nos Diferencia",
+      "subtitle": "Nuestro rastreador de finanzas combina características potentes con simplicidad para brindarte la mejor experiencia",
+      "sheets": "Integración con Google Sheets",
+      "sheetsDesc": "Interfaz familiar de hoja de cálculo con potente sincronización en la nube",
+      "pwa": "Aplicación Web Progresiva",
+      "pwaDesc": "Instala en cualquier dispositivo y úsala como una aplicación nativa con capacidades sin conexión",
+      "offline": "Prioridad Sin Conexión",
+      "offlineDesc": "Trabaja sin internet y sincroniza automáticamente cuando vuelvas a estar en línea",
+      "multimodal": "Entrada Multimodal",
+      "multimodalDesc": "Añade transacciones mediante voz, fotos o texto para máxima comodidad"
+    },
+    "tabs": {
+      "title": "Características Potentes en Cada Etapa",
+      "subtitle": "Desde funcionalidad básica hasta características avanzadas de IA, te tenemos cubierto",
+      "core": "Características Básicas",
+      "enhanced": "Características Mejoradas",
+      "advanced": "Características Avanzadas",
+      "coreTitle": "Características Financieras Básicas",
+      "coreDesc": "Todo lo que necesitas para comenzar con el seguimiento financiero",
+      "enhancedTitle": "Características Mejoradas",
+      "enhancedDesc": "Lleva tu gestión financiera al siguiente nivel",
+      "advancedTitle": "Características Avanzadas de IA",
+      "advancedDesc": "Capacidades de IA de vanguardia para una gestión financiera sin esfuerzo"
+    },
+    "coreFeatures": {
+      "transactions": "Gestión de Transacciones",
+      "transactionsDesc": "Seguimiento de ingresos y gastos con categorización detallada",
+      "sync": "Sincronización con Google Sheets",
+      "syncDesc": "Sincronización en tiempo real con Google Sheets",
+      "auth": "Autenticación Segura",
+      "authDesc": "Integración con Google OAuth2 para acceso seguro",
+      "dashboard": "Panel Básico",
+      "dashboardDesc": "Resumen mensual con métricas financieras esenciales"
+    },
+    "enhancedFeatures": {
+      "import": "Importación Masiva CSV",
+      "importDesc": "Importa historial de transacciones desde tu banco u otras aplicaciones",
+      "offline": "Capacidades Sin Conexión",
+      "offlineDesc": "Trabaja sin internet y sincroniza cuando vuelvas a estar en línea",
+      "analytics": "Análisis Avanzado",
+      "analyticsDesc": "Informes visuales con filtrado por fecha y categoría",
+      "pwa": "Instalación PWA",
+      "pwaDesc": "Instala en cualquier dispositivo y úsala como una aplicación nativa"
+    },
+    "advancedFeatures": {
+      "ocr": "Escaneo OCR de Recibos",
+      "ocrDesc": "Extrae automáticamente detalles de transacciones desde fotos",
+      "voice": "Voz a Texto",
+      "voiceDesc": "Añade transacciones simplemente hablando a tu dispositivo",
+      "categories": "Categorización Inteligente",
+      "categoriesDesc": "Sugerencias impulsadas por IA para categorías de transacciones",
+      "budget": "Automatización de Presupuesto",
+      "budgetDesc": "Alertas inteligentes y notificaciones de límite de gastos"
+    },
+    "technology": {
+      "title": "Construido con Tecnología Moderna",
+      "subtitle": "Nuestra aplicación aprovecha tecnologías de vanguardia para rendimiento, fiabilidad y seguridad"
+    },
+    "pricing": {
+      "title": "Precios Simples y Transparentes",
+      "subtitle": "Elige el plan que mejor funcione para tus necesidades financieras",
+      "free": "Gratis",
+      "freeDesc": "Para uso personal básico",
+      "freePrice": "$0",
+      "freeFreq": "Para siempre",
+      "premium": "Premium",
+      "premiumDesc": "Para individuos y familias",
+      "premiumPrice": "$9.99",
+      "premiumFreq": "por mes",
+      "business": "Negocios",
+      "businessDesc": "Para pequeñas empresas",
+      "businessPrice": "$24.99",
+      "businessFreq": "por mes",
+      "popular": "Popular",
+      "getStarted": "Comenzar",
+      "startTrial": "Comenzar Prueba Gratuita",
+      "contactSales": "Contactar Ventas"
+    },
+    "pricingFeatures": {
+      "free": {
+        "core": "Características financieras básicas",
+        "transactions": "Hasta 100 transacciones/mes",
+        "dashboard": "Panel básico",
+        "sheets": "Integración con Google Sheets"
+      },
+      "premium": {
+        "free": "Todas las características Gratuitas",
+        "unlimited": "Transacciones ilimitadas",
+        "analytics": "Análisis avanzado",
+        "import": "Importaciones masivas CSV",
+        "offline": "Capacidades sin conexión"
+      },
+      "business": {
+        "premium": "Todas las características Premium",
+        "multiuser": "Acceso multiusuario",
+        "ai": "Características impulsadas por IA",
+        "support": "Soporte prioritario",
+        "reporting": "Informes avanzados"
+      }
+    },
+    "roadmap": {
+      "title": "Hoja de Ruta de Desarrollo",
+      "subtitle": "Nuestro viaje para construir la aplicación definitiva de seguimiento financiero",
+      "core": "Funcionalidad Básica",
+      "coreDesc": "Configuración de infraestructura, sistema de autenticación, características financieras básicas y fundamentos de UI",
+      "enhanced": "Características Mejoradas",
+      "enhancedDesc": "Gestión de datos, análisis avanzado y experiencia de usuario mejorada con capacidades PWA",
+      "advanced": "Características Avanzadas",
+      "advancedDesc": "Características de IA, controles financieros y sistemas de notificación para una experiencia financiera completa"
+    },
+    "cta": {
+      "title": "¿Listo para Tomar el Control de Tus Finanzas?",
+      "subtitle": "Únete a miles de usuarios que ya están gestionando sus finanzas de manera más efectiva",
+      "startTrial": "Comenzar Prueba Gratuita",
+      "learnMore": "Saber Más"
+    },
+    "testimonials": {
+      "title": "Lo Que Dicen Nuestros Usuarios",
+      "subtitle": "No solo tomes nuestra palabra. Esto es lo que nuestros usuarios tienen que decir",
+      "user1": {
+        "name": "Sarah J.",
+        "type": "Usuario Premium",
+        "quote": "Esta aplicación ha transformado completamente cómo gestiono mis finanzas. La integración con Google Sheets es brillante, y las capacidades sin conexión significan que puedo actualizar mis gastos en cualquier lugar."
+      },
+      "user2": {
+        "name": "Michael T.",
+        "type": "Usuario Empresarial",
+        "quote": "Las características de IA son revolucionarias. Poder escanear recibos y tenerlos categorizados automáticamente me ahorra horas cada semana. Vale cada centavo para mi pequeño negocio."
+      },
+      "user3": {
+        "name": "Elena R.",
+        "type": "Usuario Gratuito",
+        "quote": "Incluso la versión gratuita tiene todo lo que necesito para llevar el seguimiento de mis finanzas personales. La interfaz es intuitiva y la experiencia móvil es impecable."
+      }
+    },
+    "footer": {
+      "rights": "Todos los derechos reservados",
+      "terms": "Términos",
+      "privacy": "Privacidad",
+      "contact": "Contacto"
+    }
+  },
+  "login": {
+    "welcome": "Welcome back",
+    "description": "Login with your Apple or Google account",
+    "loginWithApple": "Login with Apple (soon)",
+    "loginWithGoogle": "Login with Google (soon)",
+    "orContinueWith": "Or continue with",
+    "email": "Email",
+    "password": "Password",
+    "passwordDescription": "Your password must be at least 8 characters",
+    "forgotPassword": "Forgot your password? (soon)",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up (soon)",
+    "termsAndPrivacy": "By clicking continue, you agree to our {termsLink} and {privacyLink}.",
+    "termsLink": "Terms of Service",
+    "privacyLink": "Privacy Policy"
+  },
+  "backend": {
+    "error": {
+      "generic": "An error occurred. Please try again.",
+      "network": "Network error. Please check your connection.",
+      "timeout": "Request timed out. Please try again later.",
+      "unauthorized": "Unauthorized access. Please log in again.",
+      "notFound": "Resource not found. Please check the URL.",
+      "PDP01": "Invalid email or password. Please try again.",
+      "GENERAL": "An error occurred. Please try again.",
+      "GENERAL_WITH_EXCEPTION": "An error occurred: {exception}. Please try again."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "folders": [
+    { "path": "." },
+    { "path": "./apps/sls-api" },
+    { "path": "./apps/chrome-extension" },
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      { "directory": ".", "changeProcessCWD": true },
+      { "directory": "./apps/sls-api", "changeProcessCWD": true },
+      { "directory": "./apps/chrome-extension", "changeProcessCWD": true },
+    ],
+  },
+}

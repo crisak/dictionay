@@ -1,0 +1,192 @@
+{
+  "landing": {
+    "brand": "FinanceTracker",
+    "nav": {
+      "features": "Features",
+      "technology": "Technology",
+      "pricing": "Pricing",
+      "roadmap": "Roadmap",
+      "signIn": "Sign In",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "badge": "Now in Beta",
+      "title": "Smart Financial Management for Everyone",
+      "subtitle": "Track expenses, analyze patterns, and take control of your finances with our powerful and simple app",
+      "startTrial": "Start Free Trial",
+      "viewDemo": "View Demo",
+      "noCard": "No credit card required"
+    },
+    "features": {
+      "title": "What Sets Us Apart",
+      "subtitle": "Our finance tracker combines powerful features with simplicity to give you the best experience",
+      "sheets": "Integration with Google Sheets",
+      "sheetsDesc": "Familiar spreadsheet interface with powerful cloud synchronization",
+      "pwa": "Progressive Web App",
+      "pwaDesc": "Install on any device and use it as a native app with offline capabilities",
+      "offline": "Offline Priority",
+      "offlineDesc": "Work without internet and sync automatically when you come back online",
+      "multimodal": "Multimodal Input",
+      "multimodalDesc": "Add transactions via voice, photos, or text for maximum convenience"
+    },
+    "tabs": {
+      "title": "Powerful Features at Every Stage",
+      "subtitle": "From basic functionality to advanced AI features, we've got you covered",
+      "core": "Basic Features",
+      "enhanced": "Enhanced Features",
+      "advanced": "Advanced Features",
+      "coreTitle": "Basic Financial Features",
+      "coreDesc": "Everything you need to start with financial tracking",
+      "enhancedTitle": "Enhanced Features",
+      "enhancedDesc": "Take your financial management to the next level",
+      "advancedTitle": "Advanced AI Features",
+      "advancedDesc": "Cutting-edge AI capabilities for effortless financial management"
+    },
+    "coreFeatures": {
+      "transactions": "Transaction Management",
+      "transactionsDesc": "Tracking income and expenses with detailed categorization",
+      "sync": "Sync with Google Sheets",
+      "syncDesc": "Real-time synchronization with Google Sheets",
+      "auth": "Secure Authentication",
+      "authDesc": "Integration with Google OAuth2 for secure access",
+      "dashboard": "Basic Dashboard",
+      "dashboardDesc": "Monthly summary with essential financial metrics"
+    },
+    "enhancedFeatures": {
+      "import": "Bulk CSV Import",
+      "importDesc": "Import transaction history from your bank or other apps",
+      "offline": "Offline Capabilities",
+      "offlineDesc": "Work without internet and sync when you come back online",
+      "analytics": "Advanced Analytics",
+      "analyticsDesc": "Visual reports with filtering by date and category",
+      "pwa": "PWA Installation",
+      "pwaDesc": "Install on any device and use it as a native app"
+    },
+    "advancedFeatures": {
+      "ocr": "OCR Receipt Scanning",
+      "ocrDesc": "Automatically extract transaction details from photos",
+      "voice": "Voice to Text",
+      "voiceDesc": "Add transactions by simply speaking to your device",
+      "categories": "Smart Categorization",
+      "categoriesDesc": "AI-powered suggestions for transaction categories",
+      "budget": "Budget Automation",
+      "budgetDesc": "Smart alerts and spending limit notifications"
+    },
+    "technology": {
+      "title": "Built with Modern Technology",
+      "subtitle": "Our app leverages cutting-edge technologies for performance, reliability, and security"
+    },
+    "pricing": {
+      "title": "Simple and Transparent Pricing",
+      "subtitle": "Choose the plan that best fits your financial needs",
+      "free": "Free",
+      "freeDesc": "For basic personal use",
+      "freePrice": "$0",
+      "freeFreq": "Forever",
+      "premium": "Premium",
+      "premiumDesc": "For individuals and families",
+      "premiumPrice": "$9.99",
+      "premiumFreq": "per month",
+      "business": "Business",
+      "businessDesc": "For small businesses",
+      "businessPrice": "$24.99",
+      "businessFreq": "per month",
+      "popular": "Popular",
+      "getStarted": "Get Started",
+      "startTrial": "Start Free Trial",
+      "contactSales": "Contact Sales"
+    },
+    "pricingFeatures": {
+      "free": {
+        "core": "Basic financial features",
+        "transactions": "Up to 100 transactions/month",
+        "dashboard": "Basic dashboard",
+        "sheets": "Integration with Google Sheets"
+      },
+      "premium": {
+        "free": "All Free features",
+        "unlimited": "Unlimited transactions",
+        "analytics": "Advanced analytics",
+        "import": "Bulk CSV imports",
+        "offline": "Offline capabilities"
+      },
+      "business": {
+        "premium": "All Premium features",
+        "multiuser": "Multi-user access",
+        "ai": "AI-powered features",
+        "support": "Priority support",
+        "reporting": "Advanced reporting"
+      }
+    },
+    "roadmap": {
+      "title": "Development Roadmap",
+      "subtitle": "Our journey to build the ultimate financial tracking app",
+      "core": "Basic Functionality",
+      "coreDesc": "Infrastructure setup, authentication system, basic financial features, and UI fundamentals",
+      "enhanced": "Enhanced Features",
+      "enhancedDesc": "Data management, advanced analytics, and improved user experience with PWA capabilities",
+      "advanced": "Advanced Features",
+      "advancedDesc": "AI features, financial controls, and notification systems for a complete financial experience"
+    },
+    "cta": {
+      "title": "Ready to Take Control of Your Finances?",
+      "subtitle": "Join thousands of users who are already managing their finances more effectively",
+      "startTrial": "Start Free Trial",
+      "learnMore": "Learn More"
+    },
+    "testimonials": {
+      "title": "What Our Users Say",
+      "subtitle": "Don't just take our word for it. Here's what our users have to say",
+      "user1": {
+        "name": "Sarah J.",
+        "type": "Premium User",
+        "quote": "This app has completely transformed how I manage my finances. The integration with Google Sheets is brilliant, and the offline capabilities mean I can update my expenses anywhere."
+      },
+      "user2": {
+        "name": "Michael T.",
+        "type": "Business User",
+        "quote": "The AI features are revolutionary. Being able to scan receipts and have them automatically categorized saves me hours every week. It's worth every penny for my small business."
+      },
+      "user3": {
+        "name": "Elena R.",
+        "type": "Free User",
+        "quote": "Even the free version has everything I need to track my personal finances. The interface is intuitive and the mobile experience is flawless."
+      }
+    },
+    "footer": {
+      "rights": "All rights reserved",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "contact": "Contact"
+    }
+  },
+  "login": {
+    "welcome": "Welcome back",
+    "description": "Login with your Apple or Google account",
+    "loginWithApple": "Login with Apple (soon)",
+    "loginWithGoogle": "Login with Google (soon)",
+    "orContinueWith": "Or continue with",
+    "email": "Email",
+    "password": "Password",
+    "passwordDescription": "Your password must be at least 8 characters",
+    "forgotPassword": "Forgot your password? (soon)",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up (soon)",
+    "termsAndPrivacy": "By clicking continue, you agree to our {termsLink} and {privacyLink}.",
+    "termsLink": "Terms of Service",
+    "privacyLink": "Privacy Policy"
+  },
+  "backend": {
+    "error": {
+      "generic": "An error occurred. Please try again.",
+      "network": "Network error. Please check your connection.",
+      "timeout": "Request timed out. Please try again later.",
+      "unauthorized": "Unauthorized access. Please log in again.",
+      "notFound": "Resource not found. Please check the URL.",
+      "PDP01": "Invalid email or password. Please try again.",
+      "GENERAL": "An error occurred. Please try again.",
+      "GENERAL_WITH_EXCEPTION": "An error occurred: {exception}. Please try again."
+    }
+  }
+}

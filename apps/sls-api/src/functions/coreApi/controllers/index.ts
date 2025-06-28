@@ -1,0 +1,5 @@
+export * from './createTermController'
+export * from './deleteTermController'
+export * from './getTermsController'
+export * from './translateAudioController'
+export * from './translateController'
