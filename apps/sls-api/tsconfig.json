@@ -12,5 +12,5 @@
     }
   },
   "exclude": ["node_modules", "dist", "coverage"],
-  "include": ["src/**/*.ts", "serverless.ts"]
+  "include": ["serverless.ts", "src/*.ts", "src/**/*.ts"]
 }
