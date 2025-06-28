@@ -15,9 +15,26 @@ env:
   SKIP_DEPLOY: false
 
 jobs:
-  lint-and-test:
-    name: Lint and Test
+  install-dependencies:
+    name: Install Dependencies
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-optional
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: install-dependencies
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,19 +51,35 @@ jobs:
       - name: Run linting
         run: yarn lint
 
+  check-types:
+    name: Check Types
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-optional
+
       - name: Run type checks
         run: yarn check-types
 
     #   - name: Run tests
     #     run: yarn test
 
-  build-and-deploy-dev:
-    name: Build and Deploy Dev
+  build-dev:
+    name: Build
     runs-on: ubuntu-latest
-    needs: lint-and-test
+    needs: [lint, check-types]
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     environment: development
-
     steps:
       - name: Print run environment
         run: |
@@ -100,16 +133,76 @@ jobs:
           SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
           SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
           SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
+
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           EOF
 
-      - name: Authenticate with Serverless
+      - name: Build applications
         run: |
           yarn serverless login
+          yarn build:dev
         env:
+          NODE_ENV: development
+
+  deploy-dev:
+    name: Deploy Dev
+    runs-on: ubuntu-latest
+    needs: build-dev
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: development
+
+    steps:
+      - name: Print run environment
+        run: |
+          echo "🚀 Environment: ${{ vars.SLS_STAGE }} on branch ${{ github.ref }}"
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-optional
+
+      - name: Create environment files
+        run: |
+          # Admin environment (Next.js)
+          cat > apps/admin/.env << EOF
+          NODE_ENV=development
+          NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
+          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
+          EOF
+
+          # API environment (Serverless)
+          cat > apps/sls-api/.env << EOF
+          NODE_ENV=development
+          SLS_STAGE=${{ vars.SLS_STAGE }}
+          SLS_KEY_ALARM=${{ secrets.SLS_KEY_ALARM }}
+          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          EOF
 
       - name: Build applications
         run: |
@@ -153,7 +246,7 @@ jobs:
   build-and-deploy-prod:
     name: Build and Deploy Production
     runs-on: ubuntu-latest
-    needs: lint-and-test
+    needs: [lint, check-types]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production
 
@@ -247,7 +340,7 @@ jobs:
   notify:
     name: Notify Deployment
     runs-on: ubuntu-latest
-    needs: [build-and-deploy-dev, build-and-deploy-prod]
+    needs: [build-dev, build-and-deploy-prod]
     if: always() && github.event_name == 'push'
 
     steps:
