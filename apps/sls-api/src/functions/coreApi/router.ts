@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import middy from '@middy/core'
 import httpRouterHandler from '@middy/http-router'
@@ -108,7 +107,6 @@ export const routers = httpRouterHandler<EventGW<any>>([
     method: 'GET',
     path: '/v1/terms',
     handler: middy<EventGW>().handler(async (event) => {
-      //@ts-ignore
       const auth = global.dictionary.auth
 
       const page = parseInt(event.queryStringParameters?.page || '') || 1
@@ -134,7 +132,6 @@ export const routers = httpRouterHandler<EventGW<any>>([
     method: 'DELETE',
     path: '/v1/terms/:id',
     handler: middy<EventGW>().handler(async (event) => {
-      //@ts-ignore
       const auth = global.dictionary.auth
 
       await deleteTermController(auth.id, event.pathParameters?.id || '')

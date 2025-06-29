@@ -40,7 +40,6 @@ const serverlessConfig: ServerlessConfig = {
     name: 'aws',
     runtime: 'nodejs20.x',
 
-    // enable API to API Gataway a observability
     tracing: {
       apiGateway: true,
       lambda: true,
@@ -119,14 +118,14 @@ type LambdaVariables = Record<KeysVariables, string>
 
 declare global {
   namespace NodeJS {
-    interface Global {
-      dictionary: {
-        auth: {
-          id: string
-        }
-      }
-    }
     interface ProcessEnv extends LambdaVariables {}
+  }
+
+  // eslint-disable-next-line no-var
+  var dictionary: {
+    auth: {
+      id: string
+    }
   }
 }
 
