@@ -119,7 +119,8 @@ jobs:
         run: |
           ls -la
           ls -la apps/sls-api
-          yarn serverless login
+          # Configurar autenticación de Serverless usando el token
+          export SERVERLESS_ACCESS_KEY="${{ secrets.SERVERLESS_ACCESS_KEY }}"
           yarn build:dev
         env:
           NODE_ENV: development

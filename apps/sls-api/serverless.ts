@@ -28,6 +28,7 @@ const serverlessConfig: ServerlessConfig = {
   org: 'crisak',
   app: 'dictionary-app',
   service: 'dictionary',
+  frameworkVersion: '4',
 
   stages: {
     default: {
