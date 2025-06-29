@@ -110,6 +110,7 @@ jobs:
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
+
           SLS_STAGE: ${{ vars.SLS_STAGE }}
           SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
           SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
@@ -120,7 +121,10 @@ jobs:
           SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
           SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
           SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
+
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   # deploy-dev:
   #   name: Deploy Dev
