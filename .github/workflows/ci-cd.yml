@@ -95,16 +95,12 @@ jobs:
 
       - name: Build applications
         run: |
-          echo "Building with Turborepo..."
-          echo "Available apps:"
-          ls -la apps/
-          # Opción 1: Turborepo con filtro específico (--filter=sls-api)
+          echo "======= 🤖 Run on NODE_ENV: (${{ env.NODE_ENV }}) ======="
           yarn build:dev
-          
+
           # Opción 2: Si lo anterior falla, usar script directo
           # yarn build:sls-api:dev
         env:
-          NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
 
           SLS_STAGE: ${{ vars.SLS_STAGE }}
