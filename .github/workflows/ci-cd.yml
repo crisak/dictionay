@@ -75,15 +75,24 @@ jobs:
       - name: Run CI
         run: yarn turbo run ${{ matrix.task }} --filter='...[HEAD^1]'
 
-  build-dev:
+  build:
     name: Build
     runs-on: ubuntu-latest
     needs: [lint, test]
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-    environment: development
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    strategy:
+      matrix:
+        environment:
+          - name: development
+            branch: develop
+            task: build:dev
+          - name: production
+            branch: main
+            task: build
+    environment: ${{ matrix.environment.name }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -94,9 +103,9 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Build applications
-        run: yarn turbo run build:dev --filter='...[HEAD^1]'
+        run: yarn turbo run ${{ matrix.environment.task }} --filter='...[HEAD^1]'
         env:
-          NODE_ENV: development
+          NODE_ENV: ${{ matrix.environment.name }}
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
 
           SLS_STAGE: ${{ vars.SLS_STAGE }}
