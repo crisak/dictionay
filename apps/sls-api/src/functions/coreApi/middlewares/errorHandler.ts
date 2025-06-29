@@ -32,6 +32,7 @@ export const errorHandler = (
   res.status(statusCode).json({
     status: 'error',
     message: error.message || 'Internal Server Error',
+    // eslint-disable-next-line turbo/no-undeclared-env-vars
     ...(process.env.NODE_ENV === 'development' && { details: error.details }),
   })
 }

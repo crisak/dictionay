@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "TZ=UTC jest --maxWorkers=1",
-    "lint": "eslint .",
+    "lint": "eslint . --ignore-pattern .gitignore",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "tsc --noEmit",
     "deploy:layer": "bash ./scripts/layers/pub-layer.sh",

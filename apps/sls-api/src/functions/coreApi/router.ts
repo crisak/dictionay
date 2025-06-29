@@ -144,4 +144,19 @@ export const routers = httpRouterHandler<EventGW<any>>([
       }
     }),
   },
+  {
+    method: 'GET',
+    path: '/v1/health',
+    handler: middy<EventGW>().handler(async () => {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'API is healthy',
+          date: new Date().toISOString(),
+          // eslint-disable-next-line turbo/no-undeclared-env-vars
+          environment: process.env.NODE_ENV || 'development',
+        }),
+      }
+    }),
+  },
 ])
