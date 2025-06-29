@@ -119,6 +119,7 @@ jobs:
         run: |
           ls -la
           ls -la apps/sls-api
+          yarn serverless login
           yarn build:dev
         env:
           NODE_ENV: development
