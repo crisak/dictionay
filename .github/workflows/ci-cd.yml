@@ -108,7 +108,6 @@ jobs:
       - name: Build applications
         run: |
           yarn serverless login
-          # yarn build:dev
           yarn serverless package --stage ${{ vars.SLS_STAGE }} --verbose
         env:
           NODE_ENV: development
