@@ -2,13 +2,12 @@
   "name": "dictionary",
   "private": true,
   "scripts": {
-    "build:dev": "turbo run build:dev --filter sls-api --filter admin",
-    "build:sls-api:dev": "cd apps/sls-api && yarn build:dev",
-    "build": "turbo run build --filter sls-api --filter admin",
-    "dev": "turbo run dev --filter sls-api --filter admin",
-    "lint": "turbo run lint --filter sls-api --filter admin",
-    "format": "turbo run format --filter sls-api --filter admin",
-    "check-types": "turbo run check-types --filter sls-api --filter admin"
+    "build:dev": "turbo run build:dev --filter sls-api --filter admin --filter mobile",
+    "build": "turbo run build  --filter sls-api --filter admin --filter mobile",
+    "dev": "turbo run dev  --filter sls-api --filter admin --filter mobile",
+    "lint": "turbo run lint  --filter sls-api --filter admin --filter mobile",
+    "format": "turbo run format  --filter sls-api --filter admin --filter mobile",
+    "check-types": "turbo run check-types  --filter sls-api --filter admin --filter mobile"
   },
   "devDependencies": {
     "turbo": "^2.5.0",
