@@ -98,8 +98,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-optional
 
+      - name: Lint applications
+        run: yarn turbo run lint --filter='...[HEAD^1]'
+
       - name: Build applications
-        run: yarn build:dev
+        run: yarn turbo run build:dev --filter='...[HEAD^1]'
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
