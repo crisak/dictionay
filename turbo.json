@@ -11,7 +11,15 @@
       "persistent": true,
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"],
+      "env": [
+        "NODE_ENV",
+        "SERVERLESS_ACCESS_KEY",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "SLS_*",
+        "NEXT_PUBLIC_*"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]

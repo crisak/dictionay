@@ -94,9 +94,15 @@ jobs:
         run: yarn install --frozen-lockfile --ignore-optional
 
       - name: Build applications
-        working-directory: ./apps/sls-api
         run: |
+          echo "Building with Turborepo..."
+          echo "Available apps:"
+          ls -la apps/
+          # Opción 1: Turborepo con filtro específico (--filter=sls-api)
           yarn build:dev
+          
+          # Opción 2: Si lo anterior falla, usar script directo
+          # yarn build:sls-api:dev
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
