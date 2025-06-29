@@ -118,7 +118,7 @@ jobs:
       - name: Build applications
         uses: serverless/github-action@v4
         with:
-          args: package --stage ${{ vars.SLS_STAGE }} --config apps/sls-api/serverless.ts --verbose
+          args: package --stage ${{ vars.SLS_STAGE }} --config apps/sls-api/serverless.ts --verbose --debug
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
