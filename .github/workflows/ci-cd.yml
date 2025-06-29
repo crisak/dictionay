@@ -44,7 +44,7 @@ jobs:
       - name: Retrieve Node.js and dependencies
         uses: ./.github/actions/setup
       - name: Run CI
-        run: npx turbo run ${{ matrix.task }}
+        run: yarn turbo ${{ matrix.task }} --filter='...[HEAD^1]'
 
   # lint:
   #   name: Lint
