@@ -94,8 +94,8 @@ jobs:
         run: yarn install --frozen-lockfile --ignore-optional
 
       - name: Build applications
+        working-directory: ./apps/sls-api
         run: |
-          yarn serverless login
           yarn build:dev
         env:
           NODE_ENV: development
