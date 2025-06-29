@@ -106,9 +106,10 @@ jobs:
           cat apps/sls-api/.env || echo "apps/sls-api/.env file not found"
 
       - name: Build applications
-        run: |
-          yarn serverless login
-          yarn serverless package --stage ${{ vars.SLS_STAGE }} --verbose
+        uses: serverless/github-action@v4
+        with:
+          working-directory: ./apps/sls-api
+          args: package --stage ${{ vars.SLS_STAGE }} --verbose
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
