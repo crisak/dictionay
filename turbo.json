@@ -32,10 +32,6 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
     "format": {
       "dependsOn": ["^format"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
@@ -43,6 +39,10 @@
     "test": {
       "dependsOn": ["^test"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

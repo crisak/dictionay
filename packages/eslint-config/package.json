@@ -3,16 +3,16 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
-  "scripts": {
-    "lint": "eslint . --ext .js",
-    "lint:fix": "eslint . --ext .js",
-    "format": "prettier --write \"**/*.{js,json,md}\""
-  },
   "exports": {
     "./base": "./base.js",
     "./next-js": "./next.js",
     "./react-internal": "./react-internal.js",
     "./api": "./api.js"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js",
+    "format": "prettier --write \"**/*.{js,json,md}\""
   },
   "devDependencies": {
     "@repo/prettier-config": "*",
