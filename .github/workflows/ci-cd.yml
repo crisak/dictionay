@@ -73,7 +73,6 @@ jobs:
 
   #   #   - name: Run tests
   #   #     run: yarn test
-
   build-dev:
     name: Build
     runs-on: ubuntu-latest
@@ -89,14 +88,21 @@ jobs:
         with:
           fetch-depth: 2 # Fetch last 2 commits to ensure correct versioning
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-optional
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: ${{ env.NODE_VERSION }}
+      #     cache: "yarn"
+      - name: Restore Node.js and dependencies
+        uses: ./.github/actions/setup
+      # - name: Restore node_modules
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       node_modules
+      #       apps/*/node_modules
+      #       packages/*/node_modules
+      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Lint applications
         run: yarn turbo run lint --filter='...[HEAD^1]'

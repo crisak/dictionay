@@ -1,0 +1,23 @@
+name: "Setup Turborepo"
+description: "Setup Node.js and install dependencies"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20.x"
+        cache: "yarn"
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile --ignore-optional
+      shell: bash
+
+    - name: Cache/restore node_modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          apps/*/node_modules
+          packages/*/node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
