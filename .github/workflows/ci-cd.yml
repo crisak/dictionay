@@ -97,30 +97,28 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-optional
 
-      - name: Check system files
+      - name: Debug environment variables
         run: |
-          echo "Checking system files..."
-          ls -la
-          cat .env || echo ".env file not found"
-          cat apps/admin/.env || echo "apps/admin/.env file not found"
-          cat apps/sls-api/.env || echo "apps/sls-api/.env file not found"
+          echo "Checking environment variables..."
+          echo "SERVERLESS_ACCESS_KEY is set: ${{ secrets.SERVERLESS_ACCESS_KEY != '' }}"
+          echo "Working directory: $(pwd)"
+          echo "Node version: $(node --version)"
+          echo "Yarn version: $(yarn --version)"
 
-      - name: Change to sls-api directory
-        run: cd ./apps/sls-api
-
-      - name: Re check system files in sls-api
+      - name: Configure Serverless (if using org)
+        working-directory: ./apps/sls-api
+        if: env.SERVERLESS_ACCESS_KEY != ''
         run: |
-          echo "Checking system files in sls-api..."
-          ls -la
-          cat .env || echo ".env file not found"
-          cat serverless.ts || echo "serverless.ts file not found"
+          echo "Configuring Serverless authentication..."
+          # El token de acceso será usado directamente por Serverless Framework
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
 
       - name: Build applications
+        working-directory: ./apps/sls-api
         run: |
+          echo "Building serverless application..."
           ls -la
-          ls -la apps/sls-api
-          # Configurar autenticación de Serverless usando el token
-          export SERVERLESS_ACCESS_KEY="${{ secrets.SERVERLESS_ACCESS_KEY }}"
           yarn build:dev
         env:
           NODE_ENV: development

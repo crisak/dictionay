@@ -25,8 +25,6 @@ interface ServerlessConfig extends Partial<Serverless> {
 }
 
 const serverlessConfig: ServerlessConfig = {
-  org: 'crisak',
-  app: 'dictionary-app',
   service: 'dictionary',
   frameworkVersion: '4',
 
