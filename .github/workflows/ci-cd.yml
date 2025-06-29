@@ -94,14 +94,7 @@ jobs:
         run: yarn install --frozen-lockfile --ignore-optional
 
       - name: Build applications
-        run: |
-          # Print environment variables(SLS_STAGE, NODE_ENV, etc.) 
-          echo "======= 🤖 Run on NODE_ENV: (${{ env.NODE_ENV }}) ======="
-          echo "======= 🤖 Run on SLS_STAGE: (${{ env.SLS_STAGE }}) ======="
-          yarn build:dev
-
-          # Opción 2: Si lo anterior falla, usar script directo
-          # yarn build:sls-api:dev
+        run: yarn build:dev
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
