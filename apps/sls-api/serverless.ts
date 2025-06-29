@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-/* eslint-disable @typescript-eslint/no-namespace */
 import * as functions from './src/functions'
 import type { Serverless } from 'serverless/aws'
 
@@ -117,7 +115,9 @@ type KeysVariables = keyof typeof environment
 type LambdaVariables = Record<KeysVariables, string>
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface ProcessEnv extends LambdaVariables {}
   }
 
