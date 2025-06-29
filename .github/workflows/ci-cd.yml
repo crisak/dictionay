@@ -97,46 +97,30 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-optional
 
-      - name: Create environment files
+      - name: Check system files
         run: |
-          # Admin environment (Next.js)
-          cat > apps/admin/.env << EOF
-          NODE_ENV=development
-          NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
-          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
-          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
-          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
-          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
-          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
-          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
-          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
-          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
-          EOF
-
-          # API environment (Serverless)
-          cat > apps/sls-api/.env << EOF
-          NODE_ENV=development
-          SLS_STAGE=${{ vars.SLS_STAGE }}
-          SLS_KEY_ALARM=${{ secrets.SLS_KEY_ALARM }}
-          SLS_DB_NAME=${{ secrets.SLS_DB_NAME }}
-          SLS_DB_PASSWORD=${{ secrets.SLS_DB_PASSWORD }}
-          SLS_DB_USERNAME=${{ secrets.SLS_DB_USERNAME }}
-          SLS_GIF_API_KEY=${{ secrets.SLS_GIF_API_KEY }}
-          SLS_GIF_ENDPOINT=${{ secrets.SLS_GIF_ENDPOINT }}
-          SLS_IA_API_KEY=${{ secrets.SLS_IA_API_KEY }}
-          SLS_IMG_ACCESS_KEY=${{ secrets.SLS_IMG_ACCESS_KEY }}
-          SLS_IMG_ENDPOINT=${{ secrets.SLS_IMG_ENDPOINT }}
-
-          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-          EOF
+          echo "Checking system files..."
+          ls -la
+          cat .env || echo ".env file not found"
+          cat apps/admin/.env || echo "apps/admin/.env file not found"
+          cat apps/sls-api/.env || echo "apps/sls-api/.env file not found"
 
       - name: Build applications
         run: yarn build:dev
         env:
           NODE_ENV: development
+          NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
+          SLS_STAGE: ${{ vars.SLS_STAGE }}
+          SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
+          SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD: ${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME: ${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY: ${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT: ${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   # deploy-dev:
   #   name: Deploy Dev
