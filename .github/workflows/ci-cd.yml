@@ -81,10 +81,6 @@ jobs:
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     environment: development
     steps:
-      - name: Print run environment
-        run: |
-          echo "🚀 Environment: ${{ vars.SLS_STAGE }} on branch ${{ github.ref }}"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -97,29 +93,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-optional
 
-      - name: Debug environment variables
-        run: |
-          echo "Checking environment variables..."
-          echo "SERVERLESS_ACCESS_KEY is set: ${{ secrets.SERVERLESS_ACCESS_KEY != '' }}"
-          echo "Working directory: $(pwd)"
-          echo "Node version: $(node --version)"
-          echo "Yarn version: $(yarn --version)"
-
-      - name: Configure Serverless (if using org)
-        working-directory: ./apps/sls-api
-        if: env.SERVERLESS_ACCESS_KEY != ''
-        run: |
-          echo "Configuring Serverless authentication..."
-          # El token de acceso será usado directamente por Serverless Framework
-        env:
-          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-
       - name: Build applications
-        working-directory: ./apps/sls-api
-        run: |
-          echo "Building serverless application..."
-          ls -la
-          yarn build:dev
+        run: yarn build:dev
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
