@@ -105,10 +105,12 @@ jobs:
           cat apps/admin/.env || echo "apps/admin/.env file not found"
           cat apps/sls-api/.env || echo "apps/sls-api/.env file not found"
 
+      - name: Change to sls-api directory
+        run: cd ./apps/sls-api
+
       - name: Build applications
-        uses: serverless/github-action@v4
+        uses: serverless/github-action@v3.2
         with:
-          working-directory: ./apps/sls-api
           args: package --stage ${{ vars.SLS_STAGE }} --verbose
         env:
           NODE_ENV: development
