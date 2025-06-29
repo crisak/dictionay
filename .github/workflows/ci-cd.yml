@@ -82,8 +82,8 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     environment: ${{ matrix.environment.name }}
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     strategy:
       matrix:
         environment:
