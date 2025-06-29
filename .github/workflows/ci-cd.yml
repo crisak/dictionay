@@ -79,10 +79,15 @@ jobs:
     runs-on: ubuntu-latest
     # needs: [lint, check-types]
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     environment: development
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Fetch last 2 commits to ensure correct versioning
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

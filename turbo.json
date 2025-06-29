@@ -11,7 +11,13 @@
       "persistent": true,
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        ".serverless/**",
+        ".esbuild/**"
+      ],
       "env": [
         "SERVERLESS_ACCESS_KEY",
         "AWS_ACCESS_KEY_ID",
