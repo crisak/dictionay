@@ -125,6 +125,7 @@ declare global {
   var dictionary: {
     auth: {
       id: string
+      username: string
     }
   }
 }

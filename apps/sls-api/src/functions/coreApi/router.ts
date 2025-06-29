@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import middy from '@middy/core'
 import httpRouterHandler from '@middy/http-router'
 import {
@@ -21,6 +20,7 @@ type PostTranslateTerm = {
   to: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const routers = httpRouterHandler<EventGW<any>>([
   {
     method: 'POST',

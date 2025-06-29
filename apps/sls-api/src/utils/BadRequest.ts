@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// import { ErrorCodes, StatusCodes } from '../enums'
-
 export const ErrorCodes = {
   INVALID_ID: 'TMU0001B',
   INVALID_NAME: 'TMU0002B',
@@ -49,8 +46,8 @@ export class BadRequest<T = unknown> extends Error implements BadRequestProps {
     this.code = code || null
     this.data = data || null
     this.statusCode = statusCode || StatusCodes.BAD_REQUEST
-    //@ts-ignore
-    this.requestId = global?.AWSData?.requestId || ''
+    // TODO: Assign a requestId to global context
+    this.requestId = ''
     this.date = new Date().toISOString()
     this.name = 'BadRequest'
   }
