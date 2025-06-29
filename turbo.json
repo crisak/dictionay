@@ -40,6 +40,10 @@
       "dependsOn": ["^test"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
+    "test:coverage": {
+      "dependsOn": ["^test:coverage"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
