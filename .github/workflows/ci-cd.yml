@@ -82,7 +82,8 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: ${{ matrix.environment.name }}
     strategy:
       matrix:
         environment:
@@ -92,7 +93,6 @@ jobs:
           - name: production
             branch: main
             task: build
-    environment: ${{ matrix.environment.name }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
