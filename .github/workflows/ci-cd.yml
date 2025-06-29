@@ -26,7 +26,7 @@ jobs:
 
   #     - name: Retrieve Node.js and dependencies
   #       uses: ./.github/actions/setup
-  
+
   check-lint:
     name: Check Types and Lint
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
       - name: Retrieve Node.js and dependencies
         uses: ./.github/actions/setup
       - name: Run CI
-        run: yarn turbo ${{ matrix.task }} --filter='...[HEAD^1]'
+        run: yarn turbo run ${{ matrix.task }} --filter='...[HEAD^1]'
 
   # lint:
   #   name: Lint
@@ -83,8 +83,8 @@ jobs:
 
   #     - name: Run type checks
   #       run: yarn turbo run check-types --filter='...[HEAD^1]'
-    #   - name: Run tests
-    #     run: yarn test
+  #   - name: Run tests
+  #     run: yarn test
 
   build-dev:
     name: Build
