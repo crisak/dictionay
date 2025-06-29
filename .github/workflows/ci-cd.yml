@@ -109,7 +109,7 @@ jobs:
         run: cd ./apps/sls-api
 
       - name: Build applications
-        uses: serverless/github-action@v3.2
+        uses: serverless/github-action@v4
         with:
           args: package --stage ${{ vars.SLS_STAGE }} --verbose
         env:
