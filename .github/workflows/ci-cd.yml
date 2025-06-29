@@ -15,8 +15,25 @@ env:
   SKIP_DEPLOY: false
 
 jobs:
+  setup:
+    name: Setup Node.js and Dependencies
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.node.outputs.node-version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Retrieve Node.js and dependencies
+        uses: ./.github/actions/setup
+
+      - name: Set Node.js version output
+        id: node
+        run: echo "node-version=${{ env.NODE_VERSION }}" >> $GITHUB_OUTPUT
+
   lint:
     name: Lint
+    needs: setup
     runs-on: ubuntu-latest
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -38,6 +55,7 @@ jobs:
 
   test:
     name: Test
+    needs: setup
     runs-on: ubuntu-latest
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
