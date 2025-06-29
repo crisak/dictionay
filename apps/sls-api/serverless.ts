@@ -40,6 +40,7 @@ const serverlessConfig: ServerlessConfig = {
   // enable dotenv
   // https://www.serverless.com/plugins/serverless-dotenv-plugin
   plugins: ['serverless-dotenv-plugin'],
+  useDotenv: true,
 
   provider: {
     name: 'aws',
