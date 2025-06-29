@@ -94,7 +94,9 @@ jobs:
         run: yarn install --frozen-lockfile --ignore-optional
 
       - name: Build applications
-        run: yarn build:dev
+        run: |
+          yarn serverless login
+          yarn build:dev
         env:
           NODE_ENV: development
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
