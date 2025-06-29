@@ -108,6 +108,13 @@ jobs:
       - name: Change to sls-api directory
         run: cd ./apps/sls-api
 
+      - name: Re check system files in sls-api
+        run: |
+          echo "Checking system files in sls-api..."
+          ls -la
+          cat .env || echo ".env file not found"
+          cat serverless.ts || echo "serverless.ts file not found"
+
       - name: Build applications
         uses: serverless/github-action@v4
         with:
