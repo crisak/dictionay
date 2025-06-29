@@ -31,52 +31,44 @@ jobs:
   #     - name: Install dependencies
   #       run: yarn install --frozen-lockfile --ignore-optional
 
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   needs: install-dependencies
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
-  #         cache: "yarn"
+      - name: Retrieve Node.js and dependencies
+        uses: ./.github/actions/setup
 
-  #     - name: Install dependencies
-  #       run: yarn install --frozen-lockfile --ignore-optional
+      - name: Run linting
+        run: yarn turbo run lint --filter='...[HEAD^1]'
 
-  #     - name: Run linting
-  #       run: yarn lint
+  check-types:
+    name: Check Types
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  # check-types:
-  #   name: Check Types
-  #   runs-on: ubuntu-latest
-  #   needs: install-dependencies
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+      - name: Retrieve Node.js and dependencies
+        uses: ./.github/actions/setup
 
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
-  #         cache: "yarn"
+      - name: Run type checks
+        run: yarn turbo run check-types --filter='...[HEAD^1]'
+    #   - name: Run tests
+    #     run: yarn test
 
-  #     - name: Install dependencies
-  #       run: yarn install --frozen-lockfile --ignore-optional
-
-  #     - name: Run type checks
-  #       run: yarn check-types
-
-  #   #   - name: Run tests
-  #   #     run: yarn test
   build-dev:
     name: Build
     runs-on: ubuntu-latest
-    # needs: [lint, check-types]
+    needs: [lint, check-types]
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -86,26 +78,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2 # Fetch last 2 commits to ensure correct versioning
+          fetch-depth: 2
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: ${{ env.NODE_VERSION }}
-      #     cache: "yarn"
-      - name: Restore Node.js and dependencies
+      - name: Retrieve Node.js and dependencies
         uses: ./.github/actions/setup
-      # - name: Restore node_modules
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       node_modules
-      #       apps/*/node_modules
-      #       packages/*/node_modules
-      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Lint applications
-        run: yarn turbo run lint --filter='...[HEAD^1]'
 
       - name: Build applications
         run: yarn turbo run build:dev --filter='...[HEAD^1]'
