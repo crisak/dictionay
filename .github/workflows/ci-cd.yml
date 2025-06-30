@@ -5,6 +5,26 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "App to build (mobile, sls-api, admin, all)"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - mobile
+          - sls-api
+          - admin
+          - all
+      environment:
+        description: "Environment"
+        required: true
+        default: "development"
+        type: choice
+        options:
+          - development
+          - production
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -119,7 +139,9 @@ jobs:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     environment: "development"
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    if: |
+      github.ref == 'refs/heads/develop' && github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'development')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
