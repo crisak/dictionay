@@ -35,42 +35,6 @@ env:
   SKIP_DEPLOY: false
 
 jobs:
-  # Install dependencies with cache the turborepo action
-  setup-dependencies-turborepo:
-    name: Setup Dependencies (Turborepo)
-    runs-on: ubuntu-latest
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-optional
-
-  setup-dependencies-pure:
-    name: Setup Dependencies (Pure)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-optional
-
   setup:
     name: Setup Node.js and Dependencies
     runs-on: ubuntu-latest
