@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-/* eslint-disable @typescript-eslint/no-namespace */
 import * as functions from './src/functions'
 import type { Serverless } from 'serverless/aws'
 
@@ -25,9 +23,8 @@ interface ServerlessConfig extends Partial<Serverless> {
 }
 
 const serverlessConfig: ServerlessConfig = {
-  org: 'crisak',
-  app: 'dictionary-app',
   service: 'dictionary',
+  frameworkVersion: '4',
 
   stages: {
     default: {
@@ -37,15 +34,10 @@ const serverlessConfig: ServerlessConfig = {
     },
   },
 
-  // enable dotenv
-  // https://www.serverless.com/plugins/serverless-dotenv-plugin
-  plugins: ['serverless-dotenv-plugin'],
-
   provider: {
     name: 'aws',
     runtime: 'nodejs20.x',
-    profile: 'crisak',
-    // enable API to API Gataway a observability
+
     tracing: {
       apiGateway: true,
       lambda: true,
@@ -123,15 +115,18 @@ type KeysVariables = keyof typeof environment
 type LambdaVariables = Record<KeysVariables, string>
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
-    interface Global {
-      dictionary: {
-        auth: {
-          id: string
-        }
-      }
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface ProcessEnv extends LambdaVariables {}
+  }
+
+  // eslint-disable-next-line no-var
+  var dictionary: {
+    auth: {
+      id: string
+      username: string
+    }
   }
 }
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import middy from '@middy/core'
 import httpRouterHandler from '@middy/http-router'
 import { BulkTransactionsController } from './controllers'
@@ -11,6 +10,6 @@ export const routers = httpRouterHandler([
     path: '/transactions/bulk',
     handler: middy()
       .use(validationBody(BulkTransactions.BulkTransactionsSchema))
-      .handler(BulkTransactionsController.run as any),
+      .handler(BulkTransactionsController.run as never),
   },
 ])

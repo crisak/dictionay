@@ -7,7 +7,6 @@ export default {
   ],
   environment: {
     /** DB Configuration */
-    // SLS_DB_USERNAME: '${env:SLS_DB_USERNAME}',
     SLS_DB_USERNAME: '${env:SLS_DB_USERNAME}',
     SLS_DB_PASSWORD: '${env:SLS_DB_PASSWORD}',
     SLS_DB_NAME: '${env:SLS_DB_NAME}',

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import middy from '@middy/core'
 import httpRouterHandler from '@middy/http-router'
 import {
@@ -22,6 +20,7 @@ type PostTranslateTerm = {
   to: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const routers = httpRouterHandler<EventGW<any>>([
   {
     method: 'POST',
@@ -108,7 +107,6 @@ export const routers = httpRouterHandler<EventGW<any>>([
     method: 'GET',
     path: '/v1/terms',
     handler: middy<EventGW>().handler(async (event) => {
-      //@ts-ignore
       const auth = global.dictionary.auth
 
       const page = parseInt(event.queryStringParameters?.page || '') || 1
@@ -134,7 +132,6 @@ export const routers = httpRouterHandler<EventGW<any>>([
     method: 'DELETE',
     path: '/v1/terms/:id',
     handler: middy<EventGW>().handler(async (event) => {
-      //@ts-ignore
       const auth = global.dictionary.auth
 
       await deleteTermController(auth.id, event.pathParameters?.id || '')
@@ -143,6 +140,21 @@ export const routers = httpRouterHandler<EventGW<any>>([
         statusCode: 200,
         body: JSON.stringify({
           message: 'Term deleted',
+        }),
+      }
+    }),
+  },
+  {
+    method: 'GET',
+    path: '/v1/health',
+    handler: middy<EventGW>().handler(async () => {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'API is healthy',
+          date: new Date().toISOString(),
+          // eslint-disable-next-line turbo/no-undeclared-env-vars
+          environment: process.env.NODE_ENV || 'development',
         }),
       }
     }),

@@ -28,6 +28,10 @@ export async function translateController({
   text,
   to,
   source,
+}: {
+  text: string
+  to: string
+  source: string
 }): Promise<Schema.Term> {
   /**
    * Validar si el texto es un termino en la base de datos

@@ -1,7 +1,11 @@
 import { z } from 'zod'
 import { createError } from '@middy/util'
+import type { MiddlewareObj } from '@middy/core'
+import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
-export const validationBody = (schema: z.ZodTypeAny) =>
+export const validationBody = (
+  schema: z.ZodTypeAny,
+): MiddlewareObj<APIGatewayProxyEvent, APIGatewayProxyResult> =>
   ({
     before: (handler) => {
       const body = handler.event.body || null

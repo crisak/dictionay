@@ -20,6 +20,7 @@
   },
   "conventionalCommits.scopes": [
     "sls-api",
-    "admin"
+    "admin",
+    "dictionary"
   ]
 }

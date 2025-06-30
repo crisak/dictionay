@@ -654,7 +654,9 @@ export default async function LandingPage() {
                       </p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm">"{t('testimonials.user1.quote')}"</p>
+                  <p className="mt-4 text-sm">
+                    &quot;{t('testimonials.user1.quote')}&quot;
+                  </p>
                 </CardContent>
               </Card>
               <Card>
@@ -674,7 +676,9 @@ export default async function LandingPage() {
                       </p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm">"{t('testimonials.user2.quote')}"</p>
+                  <p className="mt-4 text-sm">
+                    &quot;{t('testimonials.user2.quote')}&quot;
+                  </p>
                 </CardContent>
               </Card>
               <Card>
@@ -694,7 +698,9 @@ export default async function LandingPage() {
                       </p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm">"{t('testimonials.user3.quote')}"</p>
+                  <p className="mt-4 text-sm">
+                    &quot;{t('testimonials.user3.quote')}&quot;
+                  </p>
                 </CardContent>
               </Card>
             </div>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios from 'axios'
 import { Binary, MongoClient, ObjectId, ServerApiVersion } from 'mongodb'
 import { CONFIG } from '../utils'
@@ -197,7 +196,6 @@ export async function createTermController(body: CreateTermDto) {
     .db(CONFIG.dbName)
     .collection(CONFIG.cl.userTerms)
 
-  // @ts-ignore
   const auth = global.dictionary.auth
 
   const userTerm: DB.UserTerm = {
@@ -288,8 +286,12 @@ Ensure all fields are filled correctly and provide natural, contextual examples.
       ),
     )
 
-    // Extraer y validar el JSON de la respuesta
-    const jsonMatch = (response.content?.[0] as any)?.text?.match(/\{[\s\S]*\}/)
+    const contentBlock = response.content?.[0]
+    const textContent =
+      contentBlock && contentBlock.type === 'text'
+        ? (contentBlock as { type: 'text'; text: string }).text
+        : ''
+    const jsonMatch = textContent.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       throw new Error('No valid JSON found in response')
     }
@@ -324,7 +326,7 @@ Ensure all fields are filled correctly and provide natural, contextual examples.
 /**
  * @deprecated
  */
-async function fetchSearchImage(term) {
+export async function fetchSearchImage(term: string) {
   const splitWordsBySpace = term.split(/\s+/) || []
   if (!term || splitWordsBySpace.length > 4) {
     return null
@@ -357,7 +359,7 @@ async function fetchSearchImage(term) {
  * @returns {Promise<Buffer | null>}
  * @deprecated
  */
-async function downloadImage(url) {
+export async function downloadImage(url: string) {
   return axios
     .request({
       method: 'get',

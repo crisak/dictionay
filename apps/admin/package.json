@@ -9,8 +9,8 @@
     "check-types": "tsc --noEmit",
     "***DEV***": "",
     "dev": "next dev --turbopack --port 3002",
-    "build:dev": "NODE_ENV=development next build",
-    "start:dev": "NODE_ENV=development next start",
+    "build:dev": "next build",
+    "start:dev": "next start",
     "***PROD***": "",
     "build": "next build",
     "start": "next start"
