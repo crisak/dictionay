@@ -92,7 +92,7 @@ jobs:
       - name: Retrieve Node.js and dependencies
         uses: ./.github/actions/setup
 
-      - name: Run CI
+      - name: Run ${{ matrix.task }}
         run: yarn turbo run ${{ matrix.task }} --filter='...[HEAD^1]'
 
   build-dev:
