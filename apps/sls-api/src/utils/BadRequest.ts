@@ -94,6 +94,8 @@ export class BadRequest<T = unknown> extends Error implements BadRequestProps {
         const [_, ...restStacks] = stacks
         return restStacks
       }
+
+      return stacks
     }
 
     return []
