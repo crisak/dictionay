@@ -42,7 +42,8 @@
     },
     "test:coverage": {
       "dependsOn": ["^test:coverage"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["coverage/**"]
     },
     "dev": {
       "cache": false,

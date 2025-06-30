@@ -14,9 +14,12 @@
     "***DEV***": "",
     "dev": "next dev --turbopack --port 3001",
     "build:dev": "next build",
+    "deploy:dev": "vercel --env NODE_ENV=development",
     "***PROD***": "",
     "start": "next start",
-    "build": "next build"
+    "build": "next build",
+    "build:prod": "next build",
+    "deploy:prod": "vercel --prod"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
