@@ -10,7 +10,7 @@ runs:
         cache: "yarn"
 
     - name: Install dependencies
-      run: yarn install --frozen-lockfile --ignore-optional
+      run: yarn install --frozen-lockfile
       shell: bash
 
     - name: Cache/restore node_modules
