@@ -125,24 +125,41 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Check environment
-        if: |
-          (github.event_name == 'push' && github.ref == format('refs/heads/{0}', matrix.branch)) ||
-          (github.event_name == 'pull_request' && github.base_ref == matrix.branch) ||
-          (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == matrix.environment)
-        run: echo "Running in '${{ matrix.environment }}' environment"
+        id: should-run
+        run: |
+          SHOULD_RUN=false
+
+          # Para eventos push y pull_request automáticos
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            if [[ "${{ github.ref }}" == "refs/heads/${{ matrix.branch }}" ]]; then
+              SHOULD_RUN=true
+            fi
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            if [[ "${{ github.base_ref }}" == "${{ matrix.branch }}" ]]; then
+              SHOULD_RUN=true
+            fi
+          # Para workflow_dispatch manual
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ github.event.inputs.environment }}" == "${{ matrix.environment }}" ]]; then
+              SHOULD_RUN=true
+            fi
+          fi
+
+          echo "should-run=$SHOULD_RUN" >> $GITHUB_OUTPUT
+          echo "Running for environment: ${{ matrix.environment }}, should run: $SHOULD_RUN"
 
       - name: Checkout code
+        if: steps.should-run.outputs.should-run == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
       - name: Retrieve Node.js and dependencies
+        if: steps.should-run.outputs.should-run == 'true'
         uses: ./.github/actions/setup
 
       - name: Build applications
-        # run: yarn turbo run ${{ matrix.build-task }} --filter='...[HEAD^1]'
-        # Si es manual: Hacer el build solo del app seleccionado si selecciona "all" entonces se correr "yarn turbo run build:dev"
-        # Si automático: Hacer el build de las apps que cambiaron "yarn turbo run build:dev --filter='...[HEAD^1]'
+        if: steps.should-run.outputs.should-run == 'true'
         run: |
           if [[ "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
             if [[ "${{ github.event.inputs.app }}" == "all" ]]; then
