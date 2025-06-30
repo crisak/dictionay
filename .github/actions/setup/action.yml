@@ -2,9 +2,6 @@ name: "Setup Turborepo"
 description: "Setup Node.js and install dependencies"
 runs:
   using: "composite"
-  env:
-    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-    TURBO_TEAM: ${{ vars.TURBO_TEAM }}
   steps:
     - name: Setup Node.js
       uses: actions/setup-node@v4
