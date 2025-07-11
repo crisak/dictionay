@@ -48,6 +48,14 @@ export default {
     },
     {
       http: {
+        method: 'PATCH',
+        path: '/v1/terms/re-build',
+        cors: true,
+        private: true,
+      },
+    },
+    {
+      http: {
         method: 'GET',
         path: '/v1/terms',
         cors: true,

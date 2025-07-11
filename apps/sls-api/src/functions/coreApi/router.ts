@@ -6,9 +6,12 @@ import {
   getTermsController,
   translateAudioController,
   translateController,
+  reBuildTermsController,
 } from './controllers'
 import { APIGatewayEvent } from 'aws-lambda'
 import { Term } from './schemas'
+import { CreateTermDto } from './dtos'
+import { RequestReBuildTerms } from '@repo/schemas'
 
 type EventGW<Body = string> = Omit<APIGatewayEvent, 'body'> & {
   body: Body
@@ -86,7 +89,7 @@ export const routers = httpRouterHandler<EventGW<any>>([
 
       const body = event.body
 
-      const cleanBody = {
+      const cleanBody: CreateTermDto = {
         ...body,
         tags: body.tags || [],
         srcLanguage: body.srcLanguage.toLowerCase().trim() || 'en',
@@ -101,6 +104,23 @@ export const routers = httpRouterHandler<EventGW<any>>([
         body: JSON.stringify(response),
       }
     }),
+  },
+
+  {
+    method: 'PATCH',
+    path: '/v1/terms/re-build',
+    handler: middy<EventGW<RequestReBuildTerms.Body>>().handler(
+      async (event) => {
+        console.debug('Start PATCH /v1/terms/re-build')
+
+        const response = await reBuildTermsController(event.body)
+
+        return {
+          statusCode: 200,
+          body: JSON.stringify(response),
+        }
+      },
+    ),
   },
 
   {
