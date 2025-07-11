@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { Binary, MongoClient, ObjectId, ServerApiVersion } from 'mongodb'
 import { CONFIG } from '../utils'
 import Anthropic from '@anthropic-ai/sdk'
