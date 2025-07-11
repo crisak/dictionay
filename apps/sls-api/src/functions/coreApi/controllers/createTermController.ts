@@ -6,6 +6,7 @@ import { GifApi, TranslateApi } from '../services'
 import * as Schema from '../schemas'
 import * as DB from '../models'
 import { googleApiToTerm } from '../adapters'
+import { CreateTermDto } from '../dtos'
 
 const uriDB = `mongodb+srv://${CONFIG.dbUsername}:${CONFIG.dbPassword}@production.h5yse.mongodb.net/?retryWrites=true&w=majority&appName=production`
 
@@ -19,11 +20,6 @@ interface IATranslationResponse {
   type: string[]
   level: Schema.Term['level']
 }
-
-type RequireFields = 'srcLanguage' | 'toLanguage' | 'term'
-
-type CreateTermDto = Partial<Omit<Schema.Term, RequireFields>> &
-  Pick<Schema.Term, RequireFields>
 
 const clientDB = new MongoClient(uriDB, {
   serverApi: {
@@ -321,71 +317,4 @@ Ensure all fields are filled correctly and provide natural, contextual examples.
     console.error(`${CONFIG.keyAlarm} fetchAPIIntelligentAssistant: `, error)
     throw error
   }
-}
-
-/**
- * @deprecated
- */
-export async function fetchSearchImage(term: string) {
-  const splitWordsBySpace = term.split(/\s+/) || []
-  if (!term || splitWordsBySpace.length > 4) {
-    return null
-  }
-
-  const filterTerm = term.trim().toLowerCase()
-
-  const config = {
-    method: 'get',
-    url: `${CONFIG.imgEndpoint}/search/photos?query=${filterTerm}&per_page=1&color=green`,
-    headers: {
-      Authorization: `Client-ID ${CONFIG.imgAccessKey}`,
-    },
-  }
-
-  return axios
-    .request(config)
-    .then((response) => {
-      console.debug('Result Image: ', response?.data?.results)
-      return response?.data?.results?.[0]?.urls?.thumb || null
-    })
-    .catch((error) => {
-      console.error(`${CONFIG.keyAlarm} fetchSearchImage: `, error)
-      return null
-    })
-}
-
-/**
- * @param {string} url
- * @returns {Promise<Buffer | null>}
- * @deprecated
- */
-export async function downloadImage(url: string) {
-  return axios
-    .request({
-      method: 'get',
-      url,
-      responseType: 'arraybuffer',
-      maxBodyLength: Infinity,
-    })
-    .then((response) => {
-      try {
-        if (!response.data) {
-          return null
-        }
-
-        return Buffer.from(response?.data, 'binary') || ''
-      } catch (error) {
-        console.error(
-          'Error decode image:',
-          error,
-          'Result fetch image',
-          response,
-        )
-        return null
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetch image:', error)
-      return Promise.resolve(null)
-    })
 }
