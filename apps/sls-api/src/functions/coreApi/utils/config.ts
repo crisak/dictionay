@@ -15,7 +15,7 @@ export const CONFIG = {
   /** IA API */
   iaApiKey: process.env.SLS_IA_API_KEY,
 
-  /** Images API */
+  /** @deprecated Images API */
   imgEndpoint: process.env.SLS_IMG_ENDPOINT,
   imgAccessKey: process.env.SLS_IMG_ACCESS_KEY,
   /** GIF API */
