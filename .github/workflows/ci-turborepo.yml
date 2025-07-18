@@ -16,9 +16,9 @@ jobs:
         id: changed-packages
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "packages=$(yarn turbo run build --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
+            echo "packages=$(npx turbo run build --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
           else
-            echo "packages=$(yarn turbo run build --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
+            echo "packages=$(npx turbo run build --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
           fi
 
   print-changes:
