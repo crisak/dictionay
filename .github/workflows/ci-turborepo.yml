@@ -12,6 +12,8 @@ jobs:
       packages: ${{ steps.changed-packages.outputs.packages }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - name: Print changes
         run: |
           echo "Checking for changes in packages..."
@@ -39,6 +41,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
