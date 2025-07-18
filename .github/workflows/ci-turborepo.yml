@@ -30,9 +30,11 @@ jobs:
         id: changed-packages
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "packages=$(yarn turbo run build:dev --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
+            PACKAGES=$(yarn turbo run build:dev --filter='...[origin/develop]' --dry=json | jq -r '.packages // []')
+            echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
           else
-            echo "packages=$(yarn turbo run build:dev --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
+            PACKAGES=$(yarn turbo run build:dev --filter='...[HEAD^1]' --dry=json | jq -r '.packages // []')
+            echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
           fi
 
   print-changes:
