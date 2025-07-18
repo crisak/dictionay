@@ -12,13 +12,17 @@ jobs:
       packages: ${{ steps.changed-packages.outputs.packages }}
     steps:
       - uses: actions/checkout@v4
+      - name: Print changes
+        run: |
+          echo "Checking for changes in packages..."
+          npx turbo run build --filter='...[HEAD^1]' --dry
       - name: Check changed packages
         id: changed-packages
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "packages=$(npx turbo run build --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
+            echo "packages=$(npx turbo run build --filter='...[HEAD^1]' --dry=json)" >> $GITHUB_OUTPUT
           else
-            echo "packages=$(npx turbo run build --filter=...[HEAD^1] --dry=json)" >> $GITHUB_OUTPUT
+            echo "packages=$(npx turbo run build --filter='...[HEAD^1]' --dry=json)" >> $GITHUB_OUTPUT
           fi
 
   print-changes:
@@ -45,10 +49,10 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build affected packages
-        run: yarn turbo run build:dev --filter=...[HEAD^1]
+        run: yarn turbo run build:dev --filter='...[HEAD^1]'
 
       - name: Test affected packages
-        run: yarn turbo run test --filter=...[HEAD^1]
+        run: yarn turbo run test --filter='...[HEAD^1]'
 
       - name: Lint affected packages
-        run: yarn turbo run lint --filter=...[HEAD^1]
+        run: yarn turbo run lint --filter='...[HEAD^1]'
