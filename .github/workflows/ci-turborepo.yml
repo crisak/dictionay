@@ -31,7 +31,7 @@ jobs:
 
   build-and-test:
     needs: changes
-    if: needs.changes.outputs.packages != '[]'
+    if: needs.changes.outputs.packages != '[]' || needs.changes.outputs.packages != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
