@@ -4,6 +4,9 @@ export const CONFIG = {
   dbPassword: process.env.SLS_DB_PASSWORD,
   dbName: process.env.SLS_DB_NAME,
 
+  /** Google Translate API */
+  googleApiKey: process.env.SLS_GOOGLE_API_KEY,
+
   /** cl = collection */
   cl: {
     terms: 'terms',
@@ -15,7 +18,7 @@ export const CONFIG = {
   /** IA API */
   iaApiKey: process.env.SLS_IA_API_KEY,
 
-  /** Images API */
+  /** @deprecated Images API */
   imgEndpoint: process.env.SLS_IMG_ENDPOINT,
   imgAccessKey: process.env.SLS_IMG_ACCESS_KEY,
   /** GIF API */
