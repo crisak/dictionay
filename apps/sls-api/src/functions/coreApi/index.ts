@@ -10,6 +10,10 @@ export default {
     SLS_DB_USERNAME: '${env:SLS_DB_USERNAME}',
     SLS_DB_PASSWORD: '${env:SLS_DB_PASSWORD}',
     SLS_DB_NAME: '${env:SLS_DB_NAME}',
+
+    /** Google Translate API */
+    SLS_GOOGLE_API_KEY: '${env:SLS_GOOGLE_API_KEY}',
+
     /** IA API */
     SLS_IA_API_KEY: '${env:SLS_IA_API_KEY}',
     /** Images API */

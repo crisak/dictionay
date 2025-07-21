@@ -4,6 +4,9 @@ export const CONFIG = {
   dbPassword: process.env.SLS_DB_PASSWORD,
   dbName: process.env.SLS_DB_NAME,
 
+  /** Google Translate API */
+  googleApiKey: process.env.SLS_GOOGLE_API_KEY,
+
   /** cl = collection */
   cl: {
     terms: 'terms',
