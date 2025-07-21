@@ -170,8 +170,8 @@ async function fetchBatchIA(
     fields: t.needsFields,
   }))
 
-  const srcLang = 'Spanish'
-  const toLang = 'English'
+  const toLang = 'Spanish'
+  const srcLang = 'English'
 
   const prompt = `Process the following terms and provide ONLY a valid JSON object with the specified fields for each term.
 
@@ -183,10 +183,10 @@ Respond with a JSON object where each key is the term ID and the value contains 
 {
   "term_id_1": {
     "pronunciationPhonetic": "IPA symbols if pronunciation requested",
-    "pronunciationNativePhonetic": "${srcLang} phonetic guide if pronunciation requested", 
-    "pronunciationNativePhoneticDetails": "Detailed ${srcLang} explanation if pronunciation requested",
-    "exampleSentence": "${toLang} example with <strong class='term'>term</strong> if examples requested",
-    "exampleSentenceNative": "${srcLang} translation with <strong class='term'>term</strong> if examples requested",
+    "pronunciationNativePhonetic": "${toLang} phonetic guide if pronunciation requested", 
+    "pronunciationNativePhoneticDetails": "Detailed ${toLang} explanation if pronunciation requested",
+    "exampleSentence": "${srcLang} example with <strong class='term'>term</strong> if examples requested",
+    "exampleSentenceNative": "${toLang} translation with <strong class='term'>term</strong> if examples requested",
     "type": ["array", "of", "types"] if types requested, this should Array of types identify word type, if is phrase verb, grammar, grammar time, etc. etc. e.g. ["verb", "noun", "phrasal verb", "past participle", "irregular", ...]
     "level": "a1|a2|b1|b2|c1|c2" if level requested (CEFR level)
   }
