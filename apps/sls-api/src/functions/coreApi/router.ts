@@ -7,6 +7,7 @@ import {
   translateAudioController,
   translateController,
   reBuildTermsController,
+  healthController,
 } from './controllers'
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { Term } from './schemas'
@@ -155,20 +156,6 @@ const deleteTermHandler = middy<EventGW, APIGatewayProxyResult>().handler(
   },
 )
 
-const healthHandler = middy<EventGW, APIGatewayProxyResult>().handler(
-  async () => {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'API is healthy',
-        date: new Date().toISOString(),
-        // eslint-disable-next-line turbo/no-undeclared-env-vars
-        environment: process.env.NODE_ENV || 'development',
-      }),
-    }
-  },
-)
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const routers = httpRouterHandler<EventGW<any>>([
   {
@@ -204,6 +191,6 @@ export const routers = httpRouterHandler<EventGW<any>>([
   {
     method: 'GET',
     path: '/v1/health',
-    handler: healthHandler,
+    handler: healthController,
   },
 ])
