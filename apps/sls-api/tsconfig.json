@@ -12,5 +12,11 @@
     }
   },
   "exclude": ["node_modules", "dist", "coverage"],
-  "include": ["serverless.ts", "src/*.ts", "src/**/*.ts"]
+  "include": [
+    "serverless.ts",
+    "src/*.ts",
+    "src/**/*.ts",
+    "__tests__/*.ts",
+    "__tests__/**/*.ts"
+  ]
 }
