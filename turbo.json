@@ -1,11 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"]
-    },
     "build:dev": {
       "dependsOn": ["^build:dev"],
       "persistent": true,
@@ -26,6 +21,42 @@
         "NEXT_PUBLIC_*"
       ]
     },
+    "build:prod": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"]
+    },
+    "deploy:dev": {
+      "dependsOn": ["^deploy:dev"],
+      "persistent": true,
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"],
+      "env": [
+        "SERVERLESS_ACCESS_KEY",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "SLS_*",
+        "NEXT_PUBLIC_*",
+        "NEXT_PUBLIC_RUN_ENVIRONMENT"
+      ]
+    },
+    "deploy:prod": {
+      "dependsOn": ["^deploy:prod"],
+      "persistent": true,
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"],
+      "env": [
+        "SERVERLESS_ACCESS_KEY",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "SLS_*",
+        "NEXT_PUBLIC_*",
+        "NEXT_PUBLIC_RUN_ENVIRONMENT"
+      ]
+    },
+
     "lint": {
       "dependsOn": ["^lint"]
     },
