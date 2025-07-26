@@ -1,4 +1,4 @@
-name: Manual Deploy CD Pipeline
+name: Manual CD
 
 on:
   workflow_dispatch:
@@ -48,7 +48,7 @@ jobs:
           echo "Environment: ${{ github.event.inputs.environment }}"
           echo "Application: ${{ github.event.inputs.app }}"
 
-  # Shared setup for all jobs
+  # Setup compartido para todos los jobs
   setup:
     name: Setup Dependencies
     runs-on: ubuntu-latest
@@ -87,7 +87,7 @@ jobs:
       - name: Print Environment Variables
         run: |
           echo "vercel-token: ${{ secrets.VERCEL_TOKEN }}"
-          echo "vercel-org-id: ${{ secrets.TURBO_TEAM }}"
+          echo "vercel-org-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}"
           echo "vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}"
           echo "vercel-environment-arg: ${{ env.VERCEL_ENVIRONMENT_ARG }}"
           echo "NODE_ENV: ${{ github.event.inputs.environment }}"
@@ -97,7 +97,7 @@ jobs:
           if [[ "${{ github.event.inputs.environment }}" == "development" ]]; then
             yarn turbo run build:dev --filter=mobile
           else
-            yarn turbo run build:prod --filter=mobile
+            yarn turbo run build --filter=mobile
           fi
           echo "Building Mobile App for ${{ env.VERCEL_ENVIRONMENT_ARG }}"
         env:
@@ -108,7 +108,7 @@ jobs:
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.TURBO_TEAM }}
+          vercel-org-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
           vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
           working-directory: ./apps/mobile
           vercel-args: ${{ env.VERCEL_ENVIRONMENT_ARG }}
@@ -153,7 +153,7 @@ jobs:
             yarn deploy:prod
           fi
         env:
-          NODE_ENV: ${{ github.event.inputs.environment }}
+          NODE_ENV: ${{ github.event.inputs.environment || matrix.environment }}
 
           SLS_STAGE: ${{ vars.SLS_STAGE }}
           SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
@@ -213,7 +213,7 @@ jobs:
           echo "Deployed by: ${{ github.actor }}"
           echo "Commit: ${{ github.sha }}"
 
-  # Final notification
+  # Notificación final
   notify-completion:
     name: Notify Deployment Completion
     runs-on: ubuntu-latest
