@@ -224,7 +224,7 @@ jobs:
           echo "Deployed by: ${{ github.actor }}"
           echo "Commit: ${{ github.sha }}"
 
-  # Notificación final
+  # Final notification
   notify-completion:
     name: Notify Deployment Completion
     runs-on: ubuntu-latest
