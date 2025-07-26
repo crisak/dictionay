@@ -87,7 +87,7 @@ jobs:
       - name: Print Environment Variables
         run: |
           echo "vercel-token: ${{ secrets.VERCEL_TOKEN }}"
-          echo "vercel-org-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}"
+          echo "vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}"
           echo "vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}"
           echo "vercel-environment-arg: ${{ env.VERCEL_ENVIRONMENT_ARG }}"
           echo "NODE_ENV: ${{ github.event.inputs.environment }}"
@@ -108,7 +108,7 @@ jobs:
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
           working-directory: ./apps/mobile
           vercel-args: ${{ env.VERCEL_ENVIRONMENT_ARG }}
