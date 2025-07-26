@@ -165,7 +165,7 @@ jobs:
             yarn deploy:prod
           fi
         env:
-          NODE_ENV: ${{ github.event.inputs.environment || matrix.environment }}
+          NODE_ENV: ${{ github.event.inputs.environment }}
 
           SLS_STAGE: ${{ vars.SLS_STAGE }}
           SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
