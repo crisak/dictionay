@@ -18,7 +18,7 @@ on:
           - mobile
           - sls-api
 
-name: CD - ${{ github.event.inputs.environment }} - ${{ github.event.inputs.app }}
+name: CD
 
 concurrency:
   group: manual-deploy-${{ github.event.inputs.app }}-${{ github.event.inputs.environment }}-${{ github.ref }}
