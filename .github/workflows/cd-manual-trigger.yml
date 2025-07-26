@@ -48,7 +48,7 @@ jobs:
           echo "Environment: ${{ github.event.inputs.environment }}"
           echo "Application: ${{ github.event.inputs.app }}"
 
-  # Setup compartido para todos los jobs
+  # Shared setup for all jobs
   setup:
     name: Setup Dependencies
     runs-on: ubuntu-latest
