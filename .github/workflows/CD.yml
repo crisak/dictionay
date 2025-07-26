@@ -97,7 +97,7 @@ jobs:
           if [[ "${{ github.event.inputs.environment }}" == "development" ]]; then
             yarn turbo run build:dev --filter=mobile
           else
-            yarn turbo run build --filter=mobile
+            yarn turbo run build:prod --filter=mobile
           fi
           echo "Building Mobile App for ${{ env.VERCEL_ENVIRONMENT_ARG }}"
         env:
