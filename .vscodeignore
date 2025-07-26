@@ -5,3 +5,6 @@ node_modules
 .vscode-test
 .vscode-test-*
 *.code-search
+.serverless
+.esbuild
+.next

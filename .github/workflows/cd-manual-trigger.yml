@@ -1,0 +1,253 @@
+name: Manual Deploy CD Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target Environment"
+        required: true
+        default: "development"
+        type: choice
+        options:
+          - development
+          - production
+      app:
+        description: "Application to Deploy"
+        required: true
+        default: "mobile"
+        type: choice
+        options:
+          - mobile
+          - sls-api
+
+concurrency:
+  group: manual-deploy-${{ github.event.inputs.app }}-${{ github.event.inputs.environment }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20.x"
+
+jobs:
+  # Job para validar permisos de usuario
+  validate-permissions:
+    name: Validate User Permissions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if user is authorized
+        run: |
+          AUTHORIZED_USERS=("crisak")
+          CURRENT_USER="${{ github.actor }}"
+
+          if [[ ! " ${AUTHORIZED_USERS[@]} " =~ " ${CURRENT_USER} " ]]; then
+            echo "❌ User ${CURRENT_USER} is not authorized to run manual deployments"
+            echo "Authorized users: ${AUTHORIZED_USERS[*]}"
+            exit 1
+          fi
+
+          echo "✅ User ${CURRENT_USER} is authorized to deploy"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Application: ${{ github.event.inputs.app }}"
+
+  # Shared setup for all jobs
+  setup:
+    name: Setup Dependencies
+    runs-on: ubuntu-latest
+    needs: validate-permissions
+    outputs:
+      node-version: ${{ steps.node.outputs.node-version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Retrieve Node.js and dependencies
+        uses: ./.github/actions/setup
+
+      - name: Set Node.js version output
+        id: node
+        run: echo "node-version=${{ env.NODE_VERSION }}" >> $GITHUB_OUTPUT
+
+  # Deploy Mobile App (Next.js to Vercel)
+  deploy-mobile:
+    name: Deploy Mobile App
+    runs-on: ubuntu-latest
+    needs: setup
+    if: github.event.inputs.app == 'mobile'
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      VERCEL_ENVIRONMENT_ARG: ${{ github.event.inputs.environment == 'development' && '--env NODE_ENV=development' || '--prod' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Retrieve Node.js and dependencies
+        uses: ./.github/actions/setup
+
+      - name: Build Mobile App
+        run: |
+          if [[ "${{ github.event.inputs.environment }}" == "development" ]]; then
+            yarn turbo run build:dev --filter=mobile
+          else
+            yarn turbo run build:prod --filter=mobile
+          fi
+          echo "Building Mobile App for ${{ env.VERCEL_ENVIRONMENT_ARG }}"
+        env:
+          NODE_ENV: ${{ github.event.inputs.environment }}
+          NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.TURBO_TEAM }}
+          vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
+          working-directory: ./apps/mobile
+          vercel-args: ${{ env.VERCEL_ENVIRONMENT_ARG }}
+
+      # - name: Deploy to Vercel (Development)
+      #   if: github.event.inputs.environment == 'development'
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #     vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
+      #     working-directory: ./apps/mobile
+      #     vercel-args: "--env NODE_ENV=development"
+
+      # - name: Deploy to Vercel (Production)
+      #   if: github.event.inputs.environment == 'production'
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #     vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
+      #     working-directory: ./apps/mobile
+      #     vercel-args: "--prod"
+
+      - name: Deployment Summary
+        run: |
+          echo "🚀 Mobile App deployed successfully!"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Deployed by: ${{ github.actor }}"
+          echo "Commit: ${{ github.sha }}"
+
+  # Deploy SLS API (Serverless to AWS)
+  deploy-sls-api:
+    name: Deploy SLS API
+    runs-on: ubuntu-latest
+    needs: setup
+    if: github.event.inputs.app == 'sls-api'
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Retrieve Node.js and dependencies
+        uses: ./.github/actions/setup
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to AWS
+        working-directory: ./apps/sls-api
+        run: |
+          if [[ "${{ github.event.inputs.environment }}" == "development" ]]; then
+            yarn deploy:dev
+          else
+            yarn deploy:prod
+          fi
+        env:
+          NODE_ENV: ${{ github.event.inputs.environment }}
+
+          SLS_STAGE: ${{ vars.SLS_STAGE }}
+          SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
+          SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
+          SLS_DB_PASSWORD: ${{ secrets.SLS_DB_PASSWORD }}
+          SLS_DB_USERNAME: ${{ secrets.SLS_DB_USERNAME }}
+          SLS_GIF_API_KEY: ${{ secrets.SLS_GIF_API_KEY }}
+          SLS_GIF_ENDPOINT: ${{ secrets.SLS_GIF_ENDPOINT }}
+          SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
+          SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
+          SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
+
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # - name: Deploy to AWS (Development)
+      #   if: github.event.inputs.environment == 'development'
+      #   working-directory: ./apps/sls-api
+      #   run: yarn deploy:dev
+      #   env:
+      #     SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+      #     SLS_STAGE: ${{ vars.SLS_STAGE }}
+      #     SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
+      #     SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
+      #     SLS_DB_PASSWORD: ${{ secrets.SLS_DB_PASSWORD }}
+      #     SLS_DB_USERNAME: ${{ secrets.SLS_DB_USERNAME }}
+      #     SLS_GIF_API_KEY: ${{ secrets.SLS_GIF_API_KEY }}
+      #     SLS_GIF_ENDPOINT: ${{ secrets.SLS_GIF_ENDPOINT }}
+      #     SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
+      #     SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
+      #     SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
+
+      # - name: Deploy to AWS (Production)
+      #   if: github.event.inputs.environment == 'production'
+      #   working-directory: ./apps/sls-api
+      #   run: yarn deploy:prod
+      #   env:
+      #     SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+      #     SLS_STAGE: ${{ vars.SLS_STAGE }}
+      #     SLS_KEY_ALARM: ${{ secrets.SLS_KEY_ALARM }}
+      #     SLS_DB_NAME: ${{ secrets.SLS_DB_NAME }}
+      #     SLS_DB_PASSWORD: ${{ secrets.SLS_DB_PASSWORD }}
+      #     SLS_DB_USERNAME: ${{ secrets.SLS_DB_USERNAME }}
+      #     SLS_GIF_API_KEY: ${{ secrets.SLS_GIF_API_KEY }}
+      #     SLS_GIF_ENDPOINT: ${{ secrets.SLS_GIF_ENDPOINT }}
+      #     SLS_IA_API_KEY: ${{ secrets.SLS_IA_API_KEY }}
+      #     SLS_IMG_ACCESS_KEY: ${{ secrets.SLS_IMG_ACCESS_KEY }}
+      #     SLS_IMG_ENDPOINT: ${{ secrets.SLS_IMG_ENDPOINT }}
+
+      - name: Deployment Summary
+        run: |
+          echo "🚀 SLS API deployed successfully!"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Stage: ${{ vars.SLS_STAGE }}"
+          echo "Deployed by: ${{ github.actor }}"
+          echo "Commit: ${{ github.sha }}"
+
+  # Final notification
+  notify-completion:
+    name: Notify Deployment Completion
+    runs-on: ubuntu-latest
+    needs: [deploy-mobile, deploy-sls-api]
+    if: always() && (needs.deploy-mobile.result == 'success' || needs.deploy-sls-api.result == 'success')
+    steps:
+      - name: Success Notification
+        if: (needs.deploy-mobile.result == 'success' && github.event.inputs.app == 'mobile') || (needs.deploy-sls-api.result == 'success' && github.event.inputs.app == 'sls-api')
+        run: |
+          echo "✅ Manual deployment completed successfully!"
+          echo "📱 Application: ${{ github.event.inputs.app }}"
+          echo "🌍 Environment: ${{ github.event.inputs.environment }}"
+          echo "👤 Deployed by: ${{ github.actor }}"
+          echo "📝 Commit: ${{ github.sha }}"
+          echo "🕒 Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+      - name: Failure Notification
+        if: (needs.deploy-mobile.result == 'failure' && github.event.inputs.app == 'mobile') || (needs.deploy-sls-api.result == 'failure' && github.event.inputs.app == 'sls-api')
+        run: |
+          echo "❌ Manual deployment failed!"
+          echo "📱 Application: ${{ github.event.inputs.app }}"
+          echo "🌍 Environment: ${{ github.event.inputs.environment }}"
+          echo "👤 Attempted by: ${{ github.actor }}"
+          echo "📝 Commit: ${{ github.sha }}"
+          echo "🕒 Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          exit 1

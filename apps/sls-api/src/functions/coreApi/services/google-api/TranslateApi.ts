@@ -18,7 +18,7 @@ export default class TranslateApi {
       'query.target_language': toLanguage,
       'query.display_language': 'en-US',
       'query.text': text,
-      key: 'AIzaSyDLEeFI5OtFBwYBIoK_jj5m32rZK5CkCXA',
+      key: CONFIG.googleApiKey,
       /**
        * DOC:
        * 'data_types': ['TRANSLATION', 'SENTENCE_SPLITS', 'BILINGUAL_DICTIONARY_FULL']
@@ -35,7 +35,7 @@ export default class TranslateApi {
         // Si el valor es un array, agregar múltiples entradas
         value.forEach((item) => searchParams.append(key, item))
       } else {
-        searchParams.append(key, value)
+        searchParams.append(key, value || '')
       }
     })
 

@@ -10,6 +10,10 @@ export default {
     SLS_DB_USERNAME: '${env:SLS_DB_USERNAME}',
     SLS_DB_PASSWORD: '${env:SLS_DB_PASSWORD}',
     SLS_DB_NAME: '${env:SLS_DB_NAME}',
+
+    /** Google Translate API */
+    SLS_GOOGLE_API_KEY: '${env:SLS_GOOGLE_API_KEY}',
+
     /** IA API */
     SLS_IA_API_KEY: '${env:SLS_IA_API_KEY}',
     /** Images API */
@@ -42,6 +46,14 @@ export default {
       http: {
         method: 'POST',
         path: '/v1/terms',
+        cors: true,
+        private: true,
+      },
+    },
+    {
+      http: {
+        method: 'PATCH',
+        path: '/v1/terms/re-build',
         cors: true,
         private: true,
       },

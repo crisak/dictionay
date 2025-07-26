@@ -7,16 +7,6 @@ on:
     branches: [main, develop]
   workflow_dispatch:
     inputs:
-      app:
-        description: "App to build (mobile, sls-api, admin, all)"
-        required: true
-        default: "all"
-        type: choice
-        options:
-          - mobile
-          - sls-api
-          - admin
-          - all
       environment:
         description: "Environment"
         required: true
@@ -25,6 +15,24 @@ on:
         options:
           - development
           - production
+      app:
+        description: "App"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - mobile
+          - sls-api
+          - admin
+          - all
+      action:
+        description: "Action to perform"
+        required: true
+        default: "build"
+        type: choice
+        options:
+          - build
+          - deploy
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -95,30 +103,76 @@ jobs:
       - name: Run ${{ matrix.task }}
         run: yarn turbo run ${{ matrix.task }} --filter='...[HEAD^1]'
 
-  build-dev:
+  build:
     name: Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - environment: development
+            branch: develop
+            prefix-env-script: dev
+
+          - environment: production
+            branch: main
+            prefix-env-script: prod
     needs: [lint, test]
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-    environment: "development"
-    if: |
-      github.ref == 'refs/heads/develop' && (github.event_name == 'push' || github.event_name == 'pull_request') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'development')
+      PREFIX_ENV_SCRIPT: ${{ github.event.inputs.environment == 'development' && 'dev' || 'prod' }}
+    environment: ${{ github.event.inputs.environment || matrix.environment }}
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
+      - name: Check environment
+        id: should-run
+        run: |
+          SHOULD_RUN=false
+
+          # Para eventos push y pull_request automáticos
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            if [[ "${{ github.ref }}" == "refs/heads/${{ matrix.branch }}" ]]; then
+              SHOULD_RUN=true
+            fi
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            if [[ "${{ github.base_ref }}" == "${{ matrix.branch }}" ]]; then
+              SHOULD_RUN=true
+            fi
+          # Para workflow_dispatch manual
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ github.event.inputs.environment }}" == "${{ matrix.environment }}" ]]; then
+              SHOULD_RUN=true
+            fi
+          fi
+
+          echo "should-run=$SHOULD_RUN" >> $GITHUB_OUTPUT
+          echo "Running for environment: ${{ matrix.environment }}, should run: $SHOULD_RUN"
+
       - name: Checkout code
+        if: steps.should-run.outputs.should-run == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
       - name: Retrieve Node.js and dependencies
+        if: steps.should-run.outputs.should-run == 'true'
         uses: ./.github/actions/setup
 
       - name: Build applications
-        run: yarn turbo run build:dev --filter='...[HEAD^1]'
+        if: steps.should-run.outputs.should-run == 'true'
+        run: |
+          if [[ "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
+            if [[ "${{ github.event.inputs.app }}" == "all" ]]; then
+              yarn turbo run build:${{ env.PREFIX_ENV_SCRIPT }}
+            else
+              yarn turbo run build:${{ env.PREFIX_ENV_SCRIPT }} --filter='${{ github.event.inputs.app }}'
+            fi
+          else
+            yarn turbo run build:${{ matrix.prefix-env-script }} --filter='...[HEAD^1]'
+          fi
+
         env:
-          NODE_ENV: development
+          NODE_ENV: ${{ github.event.inputs.environment || matrix.environment }}
           NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
 
           SLS_STAGE: ${{ vars.SLS_STAGE }}
