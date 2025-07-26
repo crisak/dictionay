@@ -84,6 +84,14 @@ jobs:
       - name: Retrieve Node.js and dependencies
         uses: ./.github/actions/setup
 
+      - name: Print Environment Variables
+        run: |
+          echo "vercel-token: ${{ secrets.VERCEL_TOKEN }}"
+          echo "vercel-org-id: ${{ secrets.TURBO_TEAM }}"
+          echo "vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}"
+          echo "vercel-environment-arg: ${{ env.VERCEL_ENVIRONMENT_ARG }}"
+          echo "NODE_ENV: ${{ github.event.inputs.environment }}"
+
       - name: Build Mobile App
         run: |
           if [[ "${{ github.event.inputs.environment }}" == "development" ]]; then
