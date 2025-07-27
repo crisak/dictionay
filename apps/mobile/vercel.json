@@ -1,5 +1,6 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "echo 'Install Command 🤖' && pwd && ls -la && yarn install",
   "buildCommand": "echo 'Build Command 🤖' && pwd && ls -la && yarn turbo run build:dev --filter=mobile",
-  "outputDirectory": ".next"
+  "outputDirectory": "apps/mobile/.next"
 }
