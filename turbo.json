@@ -22,7 +22,7 @@
       ]
     },
     "build:prod": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build:prod"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**", ".serverless/**"]
     },
