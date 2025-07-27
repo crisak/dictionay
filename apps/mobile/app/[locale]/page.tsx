@@ -23,6 +23,8 @@ import { getTranslations } from 'next-intl/server'
 export default async function LandingPage() {
   const t = await getTranslations('landing')
 
+  const env = process.env.NEXT_PUBLIC_RUN_ENVIRONMENT || '-'
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -46,6 +48,7 @@ export default async function LandingPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
+            <span>{env}</span>
             <Link
               href="/login"
               className="text-sm font-medium hover:underline underline-offset-4"
