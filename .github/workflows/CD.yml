@@ -105,7 +105,7 @@ jobs:
         working-directory: apps/mobile
         run: |
           echo "NEXT_PUBLIC_RUN_ENVIRONMENT=$NEXT_PUBLIC_RUN_ENVIRONMENT" >> .env
-          npx vercel build --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} --project ${{ secrets.VERCEL_MOBILE_PROJECT_ID }} --yes ${{ env.VERCEL_ENVIRONMENT_ARG }}
+          npx vercel build --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} --yes ${{ env.VERCEL_ENVIRONMENT_ARG }}
 
       - name: Print Environment Variables
         run: |
