@@ -114,8 +114,10 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
-          working-directory: ./apps/mobile
+          working-directory: apps/mobile
           vercel-args: ${{ env.VERCEL_ENVIRONMENT_ARG }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: Deployment Summary
         run: |
