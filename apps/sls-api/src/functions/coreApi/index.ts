@@ -12,7 +12,7 @@ export default {
     SLS_DB_NAME: '${env:SLS_DB_NAME}',
 
     /** Google Translate API */
-    SLS_GOOGLE_API_KEY: '${env:SLS_GOOGLE_API_KEY}',
+    GOOGLE_API_KEY: '${env:GOOGLE_API_KEY}',
 
     /** IA API */
     SLS_IA_API_KEY: '${env:SLS_IA_API_KEY}',

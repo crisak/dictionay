@@ -78,5 +78,6 @@
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalEnv": ["GOOGLE_API_KEY"]
 }
