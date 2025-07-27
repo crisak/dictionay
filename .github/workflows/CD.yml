@@ -121,7 +121,10 @@ jobs:
           ls -la apps/mobile
 
       - name: Deploy to Vercel
-        run: npx vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} --env NODE_ENV=development --prebuilt --yes ${{ env.VERCEL_ENV_ARG_PROD }}
+        run: |
+          echo "Directory: $(pwd)"
+          echo ls -la
+          npx vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} --env NODE_ENV=development --prebuilt --yes ${{ env.VERCEL_ENV_ARG_PROD }}
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
