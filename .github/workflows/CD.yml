@@ -107,6 +107,17 @@ jobs:
           echo 'Current directory:' $(pwd)
           echo 'Directory contents:'
           ls -la
+          echo 'Directory mobile contents:'
+          ls -la apps/mobile
+
+      - name: Prepare Build Directory
+        run: |
+          mkdir -p build/mobile
+          cp -r apps/mobile/.next build/mobile/.next
+          cp -r apps/mobile/public build/mobile/public
+          cp apps/mobile/package.json build/mobile/package.json
+          cp apps/mobile/next.config.js build/mobile/next.config.js
+          cp apps/mobile/tsconfig.json build/mobile/tsconfig.json || true
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -114,8 +125,8 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
-          working-directory: apps/mobile
-          vercel-args: ${{ env.VERCEL_ENVIRONMENT_ARG }}
+          working-directory: build/mobile
+          vercel-args: ${{ env.VERCEL_ENVIRONMENT_ARG }} --prebuilt
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
