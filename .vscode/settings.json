@@ -8,19 +8,15 @@
     "**/.turbo/**": true
   },
   "search.exclude": {
+    "**/.vercel/**": true,
     "**/node_modules/**": true,
     "**/dist/**": true,
     "**/.next/**": true,
     "**/.turbo/**": true
   },
   "files.exclude": {
-    "**/node_modules/**": true,
     "**/dist/**": true,
     "**/.turbo/**": true
   },
-  "conventionalCommits.scopes": [
-    "sls-api",
-    "admin",
-    "dictionary"
-  ]
+  "conventionalCommits.scopes": ["sls-api", "admin", "dictionary"]
 }
