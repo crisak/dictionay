@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "yarn turbo run build:dev --filter={APP_ID}",
+  "outputDirectory": "{OUTPUT_DIRECTORY}",
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "{DESTINATION}/$1"
+    }
+  ]
+}

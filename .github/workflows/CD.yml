@@ -186,8 +186,13 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
       VERCEL_ENV_DEV: ${{ github.event.inputs.environment == 'development' && '--env NODE_ENV=development' || '' }}
       VERCEL_ENV_ARG_PROD: ${{ github.event.inputs.environment == 'production' && '--prod' || '' }}
+
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -195,57 +200,29 @@ jobs:
       - name: Retrieve Node.js and dependencies
         uses: ./.github/actions/setup
 
-      - name: Build Mobile App
+      - name: Set Environment Variables (.env)
+        working-directory: apps/mobile
         run: |
-          if [[ "${{ github.event.inputs.environment }}" == "development" ]]; then
-            yarn turbo run build:dev --filter=mobile
-          else
-            yarn turbo run build:prod --filter=mobile
-          fi
-        env:
-          NODE_ENV: ${{ github.event.inputs.environment }}
-          NEXT_PUBLIC_RUN_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}
+          echo "NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}" >> .env
 
-      - name: Define Vercel Environment Argument
+      - name: Set up vercel settings
         run: |
-          echo "NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}" >> $GITHUB_ENV
+          # Replace variables:
+          # {APP_ID} = mobile
+          # {OUTPUT_DIRECTORY} = apps/mobile/.next
+          # {DESTINATION} = /apps/mobile
+          sed -i '' "s/{APP_ID}/mobile/g" vercel.json
+          sed -i '' "s|{OUTPUT_DIRECTORY}|apps/mobile/.next|g"
+          sed -i '' "s|{DESTINATION}|/apps/mobile|g" vercel.json
+          cat vercel.json
 
       - name: Build Vercel
-        working-directory: apps/mobile
         run: |
-          echo "NEXT_PUBLIC_RUN_ENVIRONMENT=$NEXT_PUBLIC_RUN_ENVIRONMENT" >> .env
           npx vercel build --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} --yes ${{ env.VERCEL_ENV_ARG_PROD }}
 
-      - name: Print Environment Variables
-        run: |
-          echo "vercel-token: ${{ secrets.VERCEL_TOKEN }}"
-          echo "vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}"
-          echo "vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}"
-          echo "vercel-environment-arg: ${{ env.VERCEL_ENV_DEV }} / ${{ env.VERCEL_ENV_ARG_PROD }}" 
-          echo "NODE_ENV: ${{ github.event.inputs.environment }}"
-          echo 'Current directory:' $(pwd)
-          echo 'Directory contents:'
-          ls -la
-          echo 'Directory mobile contents:'
-          ls -la apps/mobile
-
       - name: Deploy to Vercel
-        working-directory: apps/mobile
         run: |
-          echo "Directory: $(pwd)"
-          ls -la
           npx vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} --env NODE_ENV=development --prebuilt --yes ${{ env.VERCEL_ENV_ARG_PROD }}
-
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_MOBILE_PROJECT_ID }}
-          working-directory: apps/mobile
-          vercel-args: ${{ env.VERCEL_ENV_DEV }} ${{ env.VERCEL_ENV_ARG_PROD }} --prebuilt --archive=tgz
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: Deployment Summary
         run: |
