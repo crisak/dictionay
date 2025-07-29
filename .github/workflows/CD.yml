@@ -206,6 +206,7 @@ jobs:
       - name: Set Environment Variables (.env)
         working-directory: apps/mobile
         run: |
+          echo "NEXT_PUBLIC_NAME=${{ vars.NEXT_PUBLIC_NAME }}" >> .env
           echo "NEXT_PUBLIC_RUN_ENVIRONMENT=${{ vars.NEXT_PUBLIC_RUN_ENVIRONMENT }}" >> .env
 
       - name: Set up vercel settings

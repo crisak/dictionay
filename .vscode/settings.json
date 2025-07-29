@@ -18,5 +18,10 @@
     "**/dist/**": true,
     "**/.turbo/**": true
   },
-  "conventionalCommits.scopes": ["sls-api", "admin", "dictionary"]
+  "conventionalCommits.scopes": [
+    "sls-api",
+    "admin",
+    "dictionary",
+    "mobile"
+  ]
 }
