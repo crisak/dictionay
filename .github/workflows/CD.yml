@@ -98,11 +98,6 @@ jobs:
             yarn turbo run build:prod --filter=mobile
           fi
 
-      - name: Debug GitHub context
-        run: |
-          echo '${{ toJson(github) }}'
-            - name: Prepare mobile app for deployment
-
       - name: Prepare mobile app for deployment
         working-directory: apps/mobile
         run: |
