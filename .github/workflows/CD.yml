@@ -110,10 +110,11 @@ jobs:
           zip -r build.zip .next/ public/ package.json next.config.js
 
           # Start deployment
-          JOB_ID=$(aws amplify start-deployment \
+          JOB_ID=$(aws amplify start-job \
             --app-id ${{ vars.PNP_DEMO_AMPLIFY_APP_ID }} \
             --branch-name ${{ github.ref_name }} \
-            --source-url "https://github.com/${{ github.repository }}/archive/${{ github.sha }}.zip" \
+            --job-type RELEASE \
+            --commit-id ${{ github.sha }} \
             --query 'jobSummary.jobId' \
             --output text)
 
@@ -125,7 +126,7 @@ jobs:
             --branch-name ${{ github.ref_name }} \
             --job-id $JOB_ID
 
-          echo "Deployment completed successfully!"
+          echo "✨ Deployment completed successfully!"
 
   # Deploy Mobile App (Next.js to Vercel)
   deploy-mobile:
