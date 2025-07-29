@@ -68,7 +68,6 @@ jobs:
         id: node
         run: echo "node-version=${{ env.NODE_VERSION }}" >> $GITHUB_OUTPUT
 
-    # Deploy Mobile App (Next.js to Vercel)
   deploy-mobile-amplify:
     name: Deploy Mobile App - Amplify
     runs-on: ubuntu-latest
@@ -102,31 +101,77 @@ jobs:
       - name: Debug GitHub context
         run: |
           echo '${{ toJson(github) }}'
+            - name: Prepare mobile app for deployment
+
+      - name: Prepare mobile app for deployment
+        working-directory: apps/mobile
+        run: |
+          zip -r build.zip .next/ public/ package.json next.config.js
+          echo "Mobile app prepared for deployment"
 
       - name: Deploy to Amplify
         working-directory: apps/mobile
         run: |
-          # Crear archivo ZIP del build
-          zip -r build.zip .next/ public/ package.json next.config.js
-
           # Start deployment
           JOB_ID=$(aws amplify start-job \
             --app-id ${{ vars.PNP_DEMO_AMPLIFY_APP_ID }} \
             --branch-name ${{ github.ref_name }} \
             --job-type RELEASE \
             --commit-id ${{ github.sha }} \
+            --job-message "GA CD: by ${{ github.actor }} for ${{ github.event.inputs.environment }} environment" \
             --query 'jobSummary.jobId' \
             --output text)
 
-          echo "Deployment started with Job ID: $JOB_ID"
+          echo "⌛ Deployment started with Job ID: $JOB_ID"
 
-          # Esperar a que termine el deployment
-          aws amplify wait job-complete \
-            --app-id ${{ vars.PNP_DEMO_AMPLIFY_APP_ID }} \
-            --branch-name ${{ github.ref_name }} \
-            --job-id $JOB_ID
+          # Monitorear el progreso del job manualmente
+          echo "Monitoring deployment progress..."
+          TIMEOUT=1800  # 30 minutos timeout
+          ELAPSED=0
 
-          echo "✨ Deployment completed successfully!"
+          while [ $ELAPSED -lt $TIMEOUT ]; do
+            JOB_STATUS=$(aws amplify get-job \
+              --app-id ${{ vars.PNP_DEMO_AMPLIFY_APP_ID }} \
+              --branch-name ${{ github.ref_name }} \
+              --job-id $JOB_ID \
+              --query 'job.summary.status' \
+              --output text)
+            
+            echo "Job status: $JOB_STATUS (${ELAPSED}s elapsed)"
+            
+            case $JOB_STATUS in
+              "SUCCEED")
+                echo "✨ Deployment completed successfully!"
+                exit 0
+                ;;
+              "FAILED"|"CANCELLED")
+                echo "🚨 Deployment failed with status: $JOB_STATUS"
+                
+                # Get details of the failed job
+                aws amplify get-job \
+                  --app-id ${{ vars.PNP_DEMO_AMPLIFY_APP_ID }} \
+                  --branch-name ${{ github.ref_name }} \
+                  --job-id $JOB_ID \
+                  --query 'job.summary.jobArn' \
+                  --output text
+                
+                exit 1
+                ;;
+              "PENDING"|"PROVISIONING"|"RUNNING")
+                echo "⏳ Job still running... waiting 30 seconds"
+                sleep 30
+                ELAPSED=$((ELAPSED + 30))
+                ;;
+              *)
+                echo "🤔 Unknown status: $JOB_STATUS"
+                sleep 30
+                ELAPSED=$((ELAPSED + 30))
+                ;;
+            esac
+          done
+
+          echo "⌛ Deployment timed out after ${TIMEOUT} seconds"
+          exit 1
 
   # Deploy Mobile App (Next.js to Vercel)
   deploy-mobile:
