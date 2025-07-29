@@ -55,6 +55,7 @@ jobs:
     name: Setup Dependencies
     runs-on: ubuntu-latest
     needs: validate-permissions
+    if: github.event.inputs.app == 'all'
     outputs:
       node-version: ${{ steps.node.outputs.node-version }}
     steps:
@@ -207,15 +208,14 @@ jobs:
 
       - name: Set up vercel settings
         run: |
-          # Replace variables:
-          # {APP_ID} = mobile
-          # {OUTPUT_DIRECTORY} = apps/mobile/.next
-          # {DESTINATION} = /apps/mobile
-          pwd
+          echo "PWD: $(pwd)"
+          echo "Archivos:"
           ls -la
-          sed -i '' "s/{APP_ID}/mobile/g" vercel.json
-          sed -i '' "s|{OUTPUT_DIRECTORY}|apps/mobile/.next|g"
-          sed -i '' "s|{DESTINATION}|/apps/mobile|g" vercel.json
+
+          sed -i "s/{APP_ID}/mobile/g" vercel.json
+          sed -i "s|{OUTPUT_DIRECTORY}|apps/mobile/.next|g" vercel.json
+          sed -i "s|{DESTINATION}|/apps/mobile|g" vercel.json
+          echo "Contenido actualizado de vercel.json:"
           cat vercel.json
 
       - name: Build Vercel
