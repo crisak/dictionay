@@ -98,6 +98,14 @@ jobs:
             yarn turbo run build:prod --filter=mobile
           fi
 
+      - name: Print detail last commit
+        run: |
+          echo "Last commit details:"
+          echo "Author: ${{ github.actor }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Commit Message: ${{ github.event.head_commit.message }}"
+          echo "Branch: ${{ github.ref_name }}"
+
       - name: Prepare mobile app for deployment
         working-directory: apps/mobile
         run: |
@@ -113,7 +121,7 @@ jobs:
             --branch-name ${{ github.ref_name }} \
             --job-type RELEASE \
             --commit-id ${{ github.sha }} \
-            --job-message "GA CD: by ${{ github.actor }} for ${{ github.event.inputs.environment }} environment" \
+            --commit-message "GA CD: by ${{ github.actor }} for ${{ github.event.inputs.environment }} environment" \
             --query 'jobSummary.jobId' \
             --output text)
 
