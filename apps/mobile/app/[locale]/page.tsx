@@ -24,6 +24,7 @@ export default async function LandingPage() {
   const t = await getTranslations('landing')
 
   const env = process.env.NEXT_PUBLIC_RUN_ENVIRONMENT || '-'
+  const name = process.env.NEXT_PUBLIC_NAME || '-'
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -70,6 +71,12 @@ export default async function LandingPage() {
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                    {name}
+                  </h1>
+                  <p className="max-w-[600px] text-muted-foreground md:text-xl">{env}</p>
+                </div>
                 <div className="space-y-2">
                   <Badge variant="outline" className="inline-flex">
                     {t('hero.badge')}
