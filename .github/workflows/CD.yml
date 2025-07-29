@@ -211,6 +211,8 @@ jobs:
           # {APP_ID} = mobile
           # {OUTPUT_DIRECTORY} = apps/mobile/.next
           # {DESTINATION} = /apps/mobile
+          pwd
+          ls -la
           sed -i '' "s/{APP_ID}/mobile/g" vercel.json
           sed -i '' "s|{OUTPUT_DIRECTORY}|apps/mobile/.next|g"
           sed -i '' "s|{DESTINATION}|/apps/mobile|g" vercel.json
