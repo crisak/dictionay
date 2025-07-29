@@ -55,17 +55,19 @@ jobs:
     name: Setup Dependencies
     runs-on: ubuntu-latest
     needs: validate-permissions
-    if: github.event.inputs.app == 'all'
     outputs:
       node-version: ${{ steps.node.outputs.node-version }}
     steps:
       - name: Checkout code
+        if: github.event.inputs.app == 'all'
         uses: actions/checkout@v4
 
       - name: Retrieve Node.js and dependencies
+        if: github.event.inputs.app == 'all'
         uses: ./.github/actions/setup
 
       - name: Set Node.js version output
+        if: github.event.inputs.app == 'all'
         id: node
         run: echo "node-version=${{ env.NODE_VERSION }}" >> $GITHUB_OUTPUT
 
