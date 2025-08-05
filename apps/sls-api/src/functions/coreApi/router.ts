@@ -14,6 +14,12 @@ import { Term } from './schemas'
 import { CreateTermDto } from './dtos'
 import { RequestReBuildTerms } from '@repo/schemas'
 
+const headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE',
+}
+
 type EventGW<Body = string> = Omit<APIGatewayEvent, 'body'> & {
   body: Body
 }
@@ -42,6 +48,7 @@ const translateHandler = middy<
     console.error('Text is required', body)
 
     return {
+      headers,
       statusCode: 400,
       body: JSON.stringify({
         message: 'Text is required',
@@ -52,6 +59,7 @@ const translateHandler = middy<
   const response = await translateController(body)
 
   return {
+    headers,
     statusCode: 200,
     body: JSON.stringify(response),
   }
@@ -73,6 +81,7 @@ const translateAudioHandler = middy<
   const audioBase64 = await translateAudioController(body)
 
   return {
+    headers,
     statusCode: 200,
     body: JSON.stringify({
       audio: audioBase64,
@@ -97,6 +106,7 @@ const createTermHandler = middy<EventGW<Term>, APIGatewayProxyResult>().handler(
     const response = await createTermController(cleanBody)
 
     return {
+      headers,
       statusCode: 200,
       body: JSON.stringify(response),
     }
@@ -112,6 +122,7 @@ const reBuildTermsHandler = middy<
   const response = await reBuildTermsController(event.body)
 
   return {
+    headers,
     statusCode: 200,
     body: JSON.stringify(response),
   }
@@ -130,6 +141,7 @@ const getTermsHandler = middy<EventGW, APIGatewayProxyResult>().handler(
     console.debug(`Response size: ${responseSize} bytes`)
 
     return {
+      headers,
       statusCode: 200,
       body: JSON.stringify({
         list,
@@ -148,6 +160,7 @@ const deleteTermHandler = middy<EventGW, APIGatewayProxyResult>().handler(
     await deleteTermController(auth.id, event.pathParameters?.id || '')
 
     return {
+      headers,
       statusCode: 200,
       body: JSON.stringify({
         message: 'Term deleted',

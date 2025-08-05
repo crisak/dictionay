@@ -81,7 +81,7 @@ const serverlessConfig: ServerlessConfig = {
 
   build: {
     esbuild: {
-      configFile: './esbuild.config.js',
+      configFile: './esbuild.config.mjs',
     },
   },
 
@@ -121,7 +121,6 @@ declare global {
     interface ProcessEnv extends LambdaVariables {}
   }
 
-  // eslint-disable-next-line no-var
   var dictionary: {
     auth: {
       id: string

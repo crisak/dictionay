@@ -77,6 +77,7 @@ export default {
     {
       http: {
         method: 'GET',
+        cors: true,
         path: '/v1/health',
       },
     },

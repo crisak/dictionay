@@ -6,8 +6,8 @@ const config = () => {
     // Set the target ECMAScript version to ES6
     target: 'es2020',
     platform: 'node',
-    // format: 'cjs',
-    format: 'esm',
+    format: 'cjs',
+    // format: 'esm',
     // NPM packages to not be bundled, and instead be available in node_modules, and the zip file uploaded to Lambda.
     //
     // This property only makes sense if bundling is enabled.

@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 import { readFileSync } from 'fs'
 
 type TypeResource =
