@@ -40,10 +40,10 @@ const FloatingConfigMenu: React.FC<FloatingConfigMenuProps> = () => {
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 flex flex-col items-end space-y-2 z-50">
+      <div className="fixed top-0 right-0 flex flex-col items-end space-y-2 z-50">
         {/* Menú expandido */}
         {isOpen && (
-          <div className="bg-secondary/20 rounded-lg shadow-lg p-4 mb-2 transition-all duration-300 ease-in-out border border-gray-800">
+          <div className="w-[260px] absolute top-12 right-4 bg-secondary/20 backdrop-blur-2xl rounded-lg shadow-lg p-4 mb-2 transition-all duration-300 ease-in-out border border-gray-800">
             <div className="flex flex-col space-y-4">
               <MenuItem
                 icon={<User size={20} />}
@@ -80,13 +80,11 @@ const FloatingConfigMenu: React.FC<FloatingConfigMenuProps> = () => {
         <button
           onClick={toggleMenu}
           className={clsx(
-            'p-3 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ease-in-out',
-            isOpen
-              ? 'bg-primary rotate-45'
-              : 'bg-primary hover:bg-primary-dark',
+            'fixed top:-0 right-0 p-2 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ease-in-out',
+            isOpen ? 'bg-primary' : 'bg-primary hover:bg-primary-dark',
           )}
         >
-          <Settings size={24} className="text-secondary-dark" />
+          <Settings size={18} className="text-secondary-dark" />
         </button>
       </div>
 

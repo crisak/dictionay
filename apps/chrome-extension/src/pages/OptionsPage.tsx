@@ -15,8 +15,8 @@ const OptionsPage = () => {
             containerInvalidKey: 'px-4',
           }}
         >
-          <List />
           <FloatingConfigMenu />
+          <List />
         </AuthProvider>
       </div>
 

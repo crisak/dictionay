@@ -132,10 +132,31 @@ const getTermsHandler = middy<EventGW, APIGatewayProxyResult>().handler(
   async (event) => {
     const auth = global.dictionary.auth
 
-    const page = parseInt(event.queryStringParameters?.page || '') || 1
-    const limit = parseInt(event.queryStringParameters?.limit || '') || 20
+    const filtersInput = (event.queryStringParameters || {}) as {
+      tags: string
+      page: string
+      limit: string
+    }
 
-    const { list, total } = await getTermsController(auth.id, page, limit)
+    const page = parseInt(filtersInput.page || '') || 1
+    const limit = parseInt(filtersInput.limit || '') || 20
+
+    const tags =
+      filtersInput?.tags
+        ?.split(',')
+        .map((tag) => tag.trim())
+        .filter(Boolean) || []
+
+    const filters = {
+      tags,
+    }
+
+    const { list, total } = await getTermsController(
+      auth.id,
+      page,
+      limit,
+      filters,
+    )
 
     const responseSize = Buffer.byteLength(JSON.stringify(list))
     console.debug(`Response size: ${responseSize} bytes`)

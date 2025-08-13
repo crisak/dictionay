@@ -1,3 +1,7 @@
+export type GetTermsFilters = {
+  tags?: string[]
+}
+
 export interface ResultGetTerm {
   _id: string
 

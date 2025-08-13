@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { toast } from 'sonner'
 
@@ -26,7 +27,9 @@ export default function List() {
   const req = useFetchTerms()
 
   const handlePageChange = async (page: number, limit?: number) => {
-    await req.fetchTerms(page, limit)
+    await req.fetchTerms(page, limit, {
+      tags: filterTags,
+    })
   }
 
   const tags = useMemo(() => {
@@ -84,7 +87,9 @@ export default function List() {
 
   useEffect(() => {
     console.debug('options > <List /> useEffect[]')
-    req.fetchTerms()
+    req.fetchTerms(undefined, undefined, {
+      tags: filterTags,
+    })
   }, [])
 
   useEffect(() => {
@@ -160,7 +165,11 @@ export default function List() {
                 <Button
                   size="small"
                   variant="solid"
-                  onClick={() => req.fetchTerms()}
+                  onClick={() =>
+                    req.fetchTerms(undefined, undefined, {
+                      tags: filterTags,
+                    })
+                  }
                   className="group"
                 >
                   <RefreshCwIcon className="w-[18px] h-[18px] group-hover:animate-spin duration-500" />
@@ -237,6 +246,7 @@ export default function List() {
             <div className="relative">
               <Input
                 type="text"
+                size="small"
                 placeholder="Buscar término o respuesta..."
                 className="pl-10 pr-4 py-2"
                 value={searchTerm}
@@ -301,42 +311,201 @@ export default function List() {
         {(req.loading.ankiTerms || req.loading.dictionaryTerms) && (
           <div className="animate-pulse h-1 bg-primary/100 rounded"></div>
         )}
-        {filteredItems.map((item) => (
-          <li
-            key={item.id}
-            className={`py-2 px-5 flex items-center gap-4 ${
-              !item.sync && activeTab === 'Both'
-                ? 'bg-red-500/10 border-red-500/50'
-                : 'border-none'
-            }`}
-          >
-            <Avatar src={item.image} alt={item.term} />
-            <div className="flex-grow">
-              <h4>{Text.capitalize(item.term)}</h4>
-              <p className="text-third/60 text-xs">
-                {Text.capitalize(item.nativeTranslation)}
-                <span className="ml-2 tags">
-                  {item.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className="bg-primary/10 tex-white/60 rounded-full px-2 py-[2px] text-xs ml-1"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </span>
-              </p>
-            </div>
+        {filteredItems.map((item) => {
+          const invalidFields = [
+            {
+              label: 'Without example',
+              condition: Boolean(item?.exampleSentence?.trim()),
+            },
+            {
+              label: 'Without phonetic symbols',
+              condition: Boolean(item?.phoneticSymbols?.trim()),
+            },
+            { label: 'Without type', condition: Boolean(item?.type?.length) },
+          ].filter((field) => !field.condition)
 
-            {activeTab === 'Anki' && (
-              <div className="flex gap-2">
+          return (
+            <li
+              key={item.id}
+              className={`py-2 px-5 flex items-center gap-4 ${
+                !item.sync && activeTab === 'Both'
+                  ? 'bg-red-500/10 border-red-500/50'
+                  : 'border-none'
+              }`}
+            >
+              <Avatar src={item.image} alt={item.term} />
+              <div className="flex-grow">
+                <h4>{Text.capitalize(item.term)}</h4>
+
+                <p className="text-third/60 text-xs">
+                  {Text.capitalize(item.nativeTranslation)}
+                  <span className="ml-2 tags">
+                    {item.tags?.map((tag) => (
+                      <span
+                        key={tag}
+                        className="bg-primary/10 tex-white/60 rounded-full px-2 py-[2px] text-xs ml-1"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </span>
+                  {/* separator */}
+
+                  {/* <span className="ml-2 separator text-primary/20 font-bold">
+                    |
+                  </span> */}
+                  {invalidFields.length > 0 && (
+                    <span className="ml-2 separator text-primary/20 font-bold">
+                      |
+                    </span>
+                  )}
+                  <span className="ml-2 invalid-fields">
+                    {invalidFields.map((field) => (
+                      <span
+                        key={field.label}
+                        className="bg-red-600/40 tex-white/60 rounded-full px-1 py-[2px] text-xs ml-1"
+                      >
+                        {field.label}
+                      </span>
+                    ))}
+                  </span>
+                  {/* <span className="ml-2 types">
+                    {!hasExampleSentence && (
+                      <span className="bg-red-600/40 tex-white/60 rounded-full px-1 py-[2px] text-xs ml-1">
+                        Without example
+                      </span>
+                    )}
+                  </span> */}
+                </p>
+              </div>
+
+              {activeTab === 'Anki' && (
+                <div className="flex gap-2">
+                  <button
+                    className="border border-red-500/20 rounded-md p-2 hover:bg-red-500/10 dark:hover:bg-red-500/20 group"
+                    onClick={(eventButton) => {
+                      //@ts-ignore
+                      eventButton.target['disabled'] = true
+
+                      toast.promise(req.removeTermToAnki(item.id, item.term), {
+                        loading: 'Cargado...',
+                        error: (error) => {
+                          //@ts-ignore
+                          eventButton.target['disabled'] = false
+
+                          return (
+                            <div>
+                              <strong>{error.title}: </strong>{' '}
+                              {error.description}
+                              <details>
+                                <summary>Ver detalle</summary>
+
+                                <div className="overflow-x-auto bg-red-500/10 p-2 rounded-lg">
+                                  <pre>
+                                    <code>{error.details}</code>
+                                  </pre>
+                                </div>
+                              </details>
+                            </div>
+                          )
+                        },
+                        success: () => {
+                          return (
+                            <>
+                              <strong>{Text.capitalize(item.term)}</strong> ha
+                              sido eliminado
+                            </>
+                          )
+                        },
+                      })
+                    }}
+                  >
+                    <TrashIcon
+                      className="text-red-500 group-hover:animate-pulse duration-500"
+                      size={18}
+                    />
+                  </button>
+                </div>
+              )}
+
+              {activeTab === 'Both' &&
+                (item.sync ? (
+                  <Check className="text-primary" size={18} />
+                ) : (
+                  <button
+                    className="border border-blue-500/20 rounded-md p-2 hover:bg-blue-500/10 dark:hover:bg-blue-500/20 group"
+                    onClick={(eventButton) => {
+                      const body: CardVocabulary = {
+                        id: item.id,
+                        term: item.term,
+                        nativeTranslation: item.nativeTranslation,
+                        image: item.image,
+                        audio: item.audio,
+                        tags: item.tags || [],
+                        sync: true,
+                        detail: '',
+                        exampleSentence: item.exampleSentence || '',
+                        exampleSentenceTranslation:
+                          item.exampleSentenceTranslation || '',
+                        nativePronunciationGuide:
+                          item.nativePronunciationGuide || '',
+                        nativeTranslationAlternatives:
+                          item.nativeTranslationAlternatives || [],
+                        phoneticSymbols: item.phoneticSymbols || '',
+                        type: item.type || [],
+                      }
+
+                      //@ts-ignore
+                      eventButton.target['disabled'] = true
+
+                      toast.promise(req.addTermToAnki(body), {
+                        loading: 'Cargado...',
+                        error: (error) => {
+                          //@ts-ignore
+                          eventButton.target['disabled'] = false
+
+                          return (
+                            <div>
+                              <strong>{error.title}: </strong>{' '}
+                              {error.description}
+                              <details>
+                                <summary>Ver detalle</summary>
+
+                                <div className="overflow-x-auto bg-red-500/10 p-2 rounded-lg">
+                                  <pre>
+                                    <code>{error.details}</code>
+                                  </pre>
+                                </div>
+                              </details>
+                            </div>
+                          )
+                        },
+                        success: () => {
+                          return (
+                            <>
+                              <strong>{Text.capitalize(body.term)}</strong> ha
+                              sido sincronizado con Anki
+                            </>
+                          )
+                        },
+                      })
+                    }}
+                  >
+                    <RefreshCcw
+                      className="text-blue-500 group-hover:animate-spin duration-500"
+                      size={18}
+                    />
+                  </button>
+                ))}
+
+              {activeTab === 'Dictionary' && (
                 <button
-                  className="border border-red-500/20 rounded-md p-2 hover:bg-red-500/10 dark:hover:bg-red-500/20 group"
+                  className="border border-red-500/20 rounded-md p-2 hover:bg-red-500/10 dark:hover:bg-red-500/20 group ml-1"
                   onClick={(eventButton) => {
                     //@ts-ignore
                     eventButton.target['disabled'] = true
 
-                    toast.promise(req.removeTermToAnki(item.id, item.term), {
+                    toast.promise(req.removeTermApi(item.id, item.term), {
                       loading: 'Cargado...',
                       error: (error) => {
                         //@ts-ignore
@@ -373,125 +542,10 @@ export default function List() {
                     size={18}
                   />
                 </button>
-              </div>
-            )}
-
-            {activeTab === 'Both' &&
-              (item.sync ? (
-                <Check className="text-primary" size={18} />
-              ) : (
-                <button
-                  className="border border-blue-500/20 rounded-md p-2 hover:bg-blue-500/10 dark:hover:bg-blue-500/20 group"
-                  onClick={(eventButton) => {
-                    const body: CardVocabulary = {
-                      id: item.id,
-                      term: item.term,
-                      nativeTranslation: item.nativeTranslation,
-                      image: item.image,
-                      audio: item.audio,
-                      tags: item.tags || [],
-                      sync: true,
-                      detail: '',
-                      exampleSentence: item.exampleSentence || '',
-                      exampleSentenceTranslation:
-                        item.exampleSentenceTranslation || '',
-                      nativePronunciationGuide:
-                        item.nativePronunciationGuide || '',
-                      nativeTranslationAlternatives:
-                        item.nativeTranslationAlternatives || [],
-                      phoneticSymbols: item.phoneticSymbols || '',
-                      type: item.type || [],
-                    }
-
-                    //@ts-ignore
-                    eventButton.target['disabled'] = true
-
-                    toast.promise(req.addTermToAnki(body), {
-                      loading: 'Cargado...',
-                      error: (error) => {
-                        //@ts-ignore
-                        eventButton.target['disabled'] = false
-
-                        return (
-                          <div>
-                            <strong>{error.title}: </strong> {error.description}
-                            <details>
-                              <summary>Ver detalle</summary>
-
-                              <div className="overflow-x-auto bg-red-500/10 p-2 rounded-lg">
-                                <pre>
-                                  <code>{error.details}</code>
-                                </pre>
-                              </div>
-                            </details>
-                          </div>
-                        )
-                      },
-                      success: () => {
-                        return (
-                          <>
-                            <strong>{Text.capitalize(body.term)}</strong> ha
-                            sido sincronizado con Anki
-                          </>
-                        )
-                      },
-                    })
-                  }}
-                >
-                  <RefreshCcw
-                    className="text-blue-500 group-hover:animate-spin duration-500"
-                    size={18}
-                  />
-                </button>
-              ))}
-
-            {activeTab === 'Dictionary' && (
-              <button
-                className="border border-red-500/20 rounded-md p-2 hover:bg-red-500/10 dark:hover:bg-red-500/20 group ml-1"
-                onClick={(eventButton) => {
-                  //@ts-ignore
-                  eventButton.target['disabled'] = true
-
-                  toast.promise(req.removeTermApi(item.id, item.term), {
-                    loading: 'Cargado...',
-                    error: (error) => {
-                      //@ts-ignore
-                      eventButton.target['disabled'] = false
-
-                      return (
-                        <div>
-                          <strong>{error.title}: </strong> {error.description}
-                          <details>
-                            <summary>Ver detalle</summary>
-
-                            <div className="overflow-x-auto bg-red-500/10 p-2 rounded-lg">
-                              <pre>
-                                <code>{error.details}</code>
-                              </pre>
-                            </div>
-                          </details>
-                        </div>
-                      )
-                    },
-                    success: () => {
-                      return (
-                        <>
-                          <strong>{Text.capitalize(item.term)}</strong> ha sido
-                          eliminado
-                        </>
-                      )
-                    },
-                  })
-                }}
-              >
-                <TrashIcon
-                  className="text-red-500 group-hover:animate-pulse duration-500"
-                  size={18}
-                />
-              </button>
-            )}
-          </li>
-        ))}
+              )}
+            </li>
+          )
+        })}
       </ul>
     </>
   )

@@ -2,9 +2,9 @@ import SLSUtil from '../../utils/SLSUtil'
 
 export default {
   handler: `${SLSUtil.handlerPath(__dirname)}/handler.main`,
-  layers: [
-    'arn:aws:lambda:${aws:region}:${aws:accountId}:layer:node_modules_layer:1',
-  ],
+  // layers: [
+  //   'arn:aws:lambda:${aws:region}:${aws:accountId}:layer:node_modules_layer:1',
+  // ],
   environment: {
     /** DB Configuration */
     SLS_DB_USERNAME: '${env:SLS_DB_USERNAME}',

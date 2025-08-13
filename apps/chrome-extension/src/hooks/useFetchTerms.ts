@@ -2,7 +2,7 @@
  * Fetching data with API of Anki "./../services/AnkiService.ts"
  */
 import { useEffect, useState } from 'react'
-import { AnkiService, DictionaryApi } from '../services'
+import { AnkiService, DictionaryApi, GetTermsFilters } from '../services'
 import { CardVocabulary } from '../types'
 import { Text } from '../utils'
 import { useGlobalStore } from '../store/global'
@@ -66,14 +66,21 @@ export const useFetchTerms = () => {
     }
   }
 
-  const fetchTermsApi = async (page?: number, limit?: number) => {
+  const fetchTermsApi = async (
+    page?: number,
+    limit?: number,
+    filters?: GetTermsFilters,
+  ) => {
     try {
       setLoading((prev) => ({ ...prev, dictionaryTerms: true }))
 
-      const result = await DictionaryApi.getTerms({
-        limit: limit ?? pagination.limit,
-        page: page ?? pagination.page,
-      })
+      const result = await DictionaryApi.getTerms(
+        {
+          limit: limit ?? pagination.limit,
+          page: page ?? pagination.page,
+        },
+        filters,
+      )
 
       const totalRecords = result.total || 0
 
@@ -102,10 +109,14 @@ export const useFetchTerms = () => {
     }
   }
 
-  const fetchTerms = async (page?: number, limit?: number) => {
+  const fetchTerms = async (
+    page?: number,
+    limit?: number,
+    filters?: GetTermsFilters,
+  ) => {
     const [listTermsAnki, listTermsApi] = await Promise.all([
       fetchCardAnki(),
-      fetchTermsApi(page, limit),
+      fetchTermsApi(page, limit, filters),
     ])
 
     setCardsAnki(listTermsAnki)

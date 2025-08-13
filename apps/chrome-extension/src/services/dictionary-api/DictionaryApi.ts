@@ -2,6 +2,7 @@ import { SETTINGS } from '../../config'
 import { CardVocabulary } from '../../types'
 import {
   CreateTermDto,
+  GetTermsFilters,
   ResultAudioDto,
   ResultGetTerm,
 } from './DictionaryApiTypes'
@@ -49,7 +50,10 @@ export default class DictionaryApi {
     }
   }
 
-  static async getTerms(pagination?: { page: number; limit: number }) {
+  static async getTerms(
+    pagination?: { page: number; limit: number },
+    filters?: GetTermsFilters,
+  ) {
     try {
       /**
        * Generar base64 para el siguiente objeto `{ id: '60a...901', username: 'opensource1998' }`
@@ -63,6 +67,7 @@ export default class DictionaryApi {
 
       const myHeaders = new Headers()
       myHeaders.append('Accept', 'application/json')
+      myHeaders.append('Content-Type', 'application/json')
       myHeaders.append('Authorization', btoa(JSON.stringify(user)))
       myHeaders.append('X-Api-Key', DictionaryApi.API_KEY)
 
@@ -76,6 +81,12 @@ export default class DictionaryApi {
 
       if (pagination) {
         queryPagination = `?page=${pagination.page}&limit=${pagination.limit}`
+      }
+
+      // crear query de filtros
+      if (filters && filters.tags && filters.tags.length > 0) {
+        const tagsQuery = filters.tags.join(',')
+        queryPagination += `${queryPagination ? '&' : '?'}tags=${encodeURIComponent(tagsQuery)}`
       }
 
       const result: {
