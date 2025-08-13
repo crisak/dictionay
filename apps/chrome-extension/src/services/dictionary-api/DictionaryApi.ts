@@ -17,8 +17,6 @@ export default class DictionaryApi {
   static API_KEY = ''
 
   static setApiKey(apiKey: string) {
-    const trace = new Error()
-    console.debug('DictionaryApi.setApiKey', apiKey, trace)
     DictionaryApi.API_KEY = apiKey
   }
 

@@ -286,7 +286,6 @@ export const useFetchTerms = () => {
   }
 
   useEffect(() => {
-    console.debug('useFetchTerms useEffect[]', auth.apiKey)
     if (auth.apiKey) {
       DictionaryApi.setApiKey(auth.apiKey)
     }

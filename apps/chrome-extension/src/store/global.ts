@@ -69,15 +69,12 @@ export const useGlobalStore = create<State & Actions>()(
     {
       name: 'global-storage',
       storage: createJSONStorage(() => createChromeStorageAdapter()),
-      // Importante: chrome.storage.local trabaja con async
-      // así que necesitamos indicar que usamos storage asíncrono
       onRehydrateStorage: () => {
-        // Opcional: callback cuando el estado se restaura
-        return (restoredState, error) => {
+        return (_, error) => {
           if (error) {
             console.error('Error al restaurar el estado:', error)
           } else {
-            console.debug('Estado restaurado correctamente:', restoredState)
+            console.debug('State restored successfully:')
           }
         }
       },

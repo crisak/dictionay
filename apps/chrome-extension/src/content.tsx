@@ -31,7 +31,6 @@ const root = createRoot(container)
 
 let currentPopup: null | (() => void) = null
 
-// El resto del código de inicialización permanece igual...
 const showPopup = (word: string, rect: DOMRect) => {
   if (currentPopup) {
     currentPopup()

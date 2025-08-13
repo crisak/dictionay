@@ -12,16 +12,12 @@
     "**/node_modules/**": true,
     "**/dist/**": true,
     "**/.next/**": true,
-    "**/.turbo/**": true
+    "**/.turbo/**": true,
+    "**/.serverless/**": true
   },
   "files.exclude": {
     "**/dist/**": true,
     "**/.turbo/**": true
   },
-  "conventionalCommits.scopes": [
-    "sls-api",
-    "admin",
-    "dictionary",
-    "mobile"
-  ]
+  "conventionalCommits.scopes": ["sls-api", "admin", "dictionary", "mobile"]
 }

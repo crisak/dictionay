@@ -130,7 +130,8 @@ export const PopupContent: React.FC<PopupContentProps> = ({ word }) => {
     useShallow((state) => [state.auth, state.tags]),
   )
 
-  console.debug('<PopupContent />', { auth, tags })
+  // eslint-disable-next-line no-console
+  console.count('Render <PopupContent />')
 
   const { onClose } = usePopup()
 
@@ -178,6 +179,10 @@ export const PopupContent: React.FC<PopupContentProps> = ({ word }) => {
         onClose()
       })
   }
+
+  React.useEffect(() => {
+    useGlobalStore.persist.rehydrate()
+  }, [])
 
   React.useEffect(() => {
     if (auth?.apiKey) {
