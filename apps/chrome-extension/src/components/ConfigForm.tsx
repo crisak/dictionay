@@ -18,8 +18,7 @@ export default function ConfigForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Configuración guardada:', config)
-    // Aquí puedes agregar la lógica para guardar la configuración
+    // TODO: Aquí puedes agregar la lógica para guardar la configuración
   }
 
   const languages = [

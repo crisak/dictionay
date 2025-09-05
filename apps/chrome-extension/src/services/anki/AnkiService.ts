@@ -66,7 +66,6 @@ export default class AnkiService {
        */
       return result as Array<number>
     } catch (error) {
-      console.error(error)
       throw error
     }
   }
@@ -135,7 +134,6 @@ export default class AnkiService {
         sync: true,
       }))
     } catch (error) {
-      console.error(error)
       throw error
     }
   }

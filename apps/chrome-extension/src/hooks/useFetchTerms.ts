@@ -246,8 +246,6 @@ export const useFetchTerms = () => {
         (card) => cls(card.term) === cls(term),
       )
 
-      console.debug('existeTermInDictionary', existeTermInDictionary)
-
       setCards(
         cards.filter((card) => {
           const match = cls(card.term) === cls(term)
