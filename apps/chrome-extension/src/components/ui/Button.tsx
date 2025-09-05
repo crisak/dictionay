@@ -90,10 +90,6 @@ export const Button: React.FC<ButtonProps> = ({
       `bg-transparent text-${transform[c]}-600 hover:bg-${transform[c]}-100`,
 
     ghost: (c) => {
-      console.log(
-        '=',
-        `crisak-ghost bg-transparent text-${transform[c]}-400 hover:bg-${transform[c]}-50`,
-      )
       return `crisak-ghost bg-transparent text-${transform[c]}-400 hover:bg-${transform[c]}-50`
     },
     shadow: (c) => `${colorStyles[c]} shadow-lg hover:shadow-xl`,
