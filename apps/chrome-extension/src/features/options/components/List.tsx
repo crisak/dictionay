@@ -16,6 +16,7 @@ import { useFetchTerms } from '../../../hooks'
 import { Text } from '../../../utils'
 import { CardVocabulary } from '../../../types'
 import Pagination from '../../../components/Pagination'
+import { useFetchTags } from '../../../hooks/useFetchTags'
 
 export default function List() {
   const tabs = ['Both', 'Anki', 'Dictionary'] as const
@@ -25,6 +26,7 @@ export default function List() {
   const [showUnsync, setShowUnsync] = useState(false)
   const [filterTags, setFilterTags] = useState<string[]>([])
   const req = useFetchTerms()
+  const reqTags = useFetchTags()
 
   const handlePageChange = async (page: number, limit?: number) => {
     await req.fetchTerms(page, limit, {
@@ -33,23 +35,10 @@ export default function List() {
   }
 
   const tags = useMemo(() => {
-    /**
-     * Filtrar los tags en un solo array y por cada tag debe devolver el total de veces que se repite
-     */
-    const tags = req.cards
-      .map((card) => card.tags || [])
-      .flat()
-      .filter(Boolean)
-      .reduce(
-        (acc, tag) => {
-          acc[tag] = (acc[tag] || 0) + 1
-          return acc
-        },
-        {} as Record<string, number>,
-      )
+    const tags = reqTags.tags.map((item) => item.tag).filter(Boolean)
 
-    return Object.entries(tags).map(([tag]) => tag)
-  }, [req.cards])
+    return tags
+  }, [reqTags.tags])
 
   const filteredItems = useMemo(() => {
     let itemsFilter = req.cards
@@ -90,6 +79,8 @@ export default function List() {
     req.fetchTerms(undefined, undefined, {
       tags: filterTags,
     })
+
+    reqTags.fetch()
   }, [])
 
   useEffect(() => {
@@ -98,7 +89,13 @@ export default function List() {
         description: req.error.description,
       })
     }
-  }, [req.error])
+
+    if (reqTags.error?.description) {
+      toast.error(reqTags.error.title, {
+        description: reqTags.error.description,
+      })
+    }
+  }, [req.error, reqTags.error])
 
   return (
     <>
@@ -165,11 +162,13 @@ export default function List() {
                 <Button
                   size="small"
                   variant="solid"
-                  onClick={() =>
+                  onClick={() => {
                     req.fetchTerms(undefined, undefined, {
                       tags: filterTags,
                     })
-                  }
+
+                    reqTags.fetch()
+                  }}
                   className="group"
                 >
                   <RefreshCwIcon className="w-[18px] h-[18px] group-hover:animate-spin duration-500" />

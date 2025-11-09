@@ -1,5 +1,5 @@
 import { SETTINGS } from '../../config'
-import { CardVocabulary } from '../../types'
+import { CardVocabulary, FetchTags } from '../../types'
 import {
   CreateTermDto,
   GetTermsFilters,
@@ -149,6 +149,41 @@ export default class DictionaryApi {
         limit: result.limit || 20,
         total: result.total || 0,
       }
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  }
+
+  static async getTags() {
+    try {
+      const user = {
+        id: '60a3e5b9c7d4e12345678901',
+        username: 'opensource1998',
+      }
+
+      const myHeaders = new Headers()
+      myHeaders.append('Accept', 'application/json')
+      myHeaders.append('Content-Type', 'application/json')
+      myHeaders.append('Authorization', btoa(JSON.stringify(user)))
+      myHeaders.append('X-Api-Key', DictionaryApi.API_KEY)
+
+      const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      } as RequestInit
+
+      const result: FetchTags = await fetch(
+        `${DictionaryApi.ENDPOINT}/v1/tags`,
+        requestOptions,
+      ).then((response) => response.json())
+
+      if (!Array.isArray(result?.list)) {
+        throw result
+      }
+
+      return result.list
     } catch (error) {
       console.error(error)
       throw error
