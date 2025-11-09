@@ -7,6 +7,7 @@
     "build:content": "vite build --config vite.content.config.ts",
     "dev": "vite",
     "build:view": "tsc -b && vite build",
+    "pre:build": "op inject -i .env.template -o .env",
     "build": "yarn build:content && yarn build:view",
     "lint": "eslint .",
     "preview": "vite preview"

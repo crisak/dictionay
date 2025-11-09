@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless Framework API for App",
   "scripts": {
+    "pre:build": "op inject -i .env.template -o .env",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
