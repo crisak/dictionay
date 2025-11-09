@@ -6,6 +6,8 @@ export default {
   //   'arn:aws:lambda:${aws:region}:${aws:accountId}:layer:node_modules_layer:1',
   // ],
   environment: {
+    VERBOSE: 'Nov. 10, 2025 04:22:18',
+
     /** DB Configuration */
     SLS_DB_USERNAME: '${env:SLS_DB_USERNAME}',
     SLS_DB_PASSWORD: '${env:SLS_DB_PASSWORD}',
@@ -71,6 +73,14 @@ export default {
         method: 'DELETE',
         path: '/v1/terms/{id}',
         cors: true,
+        private: true,
+      },
+    },
+    {
+      http: {
+        method: 'GET',
+        cors: true,
+        path: '/v1/tags',
         private: true,
       },
     },

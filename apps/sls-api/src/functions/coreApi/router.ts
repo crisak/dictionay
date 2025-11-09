@@ -1,6 +1,7 @@
 import middy from '@middy/core'
 import httpRouterHandler from '@middy/http-router'
 import {
+  getTagsController,
   createTermController,
   deleteTermController,
   getTermsController,
@@ -219,8 +220,13 @@ export const routers = httpRouterHandler<EventGW<any>>([
   },
   {
     method: 'DELETE',
-    path: '/v1/terms/:id',
+    path: '/v1/terms/{id}',
     handler: deleteTermHandler,
+  },
+  {
+    method: 'GET',
+    path: '/v1/tags',
+    handler: getTagsController,
   },
   {
     method: 'GET',
