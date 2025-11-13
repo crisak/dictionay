@@ -9,6 +9,7 @@ import {
   RefreshCcw,
   TrashIcon,
   RefreshCwIcon,
+  Wrench,
   Cog,
 } from 'lucide-react'
 import { Avatar, Button, Input, MultiSelect } from '../../../components/ui'
@@ -17,6 +18,7 @@ import { Text } from '../../../utils'
 import { CardVocabulary } from '../../../types'
 import Pagination from '../../../components/Pagination'
 import { useFetchTags } from '../../../hooks/useFetchTags'
+import TagOption from './TagOption'
 
 export default function List() {
   const tabs = ['Both', 'Anki', 'Dictionary'] as const
@@ -274,8 +276,21 @@ export default function List() {
                 onChange={() => setShowUnsync(!showUnsync)}
               />
               <label htmlFor="showUnsync" className="text-sm text-third ml-3">
-                Mostrar valores no sincronizados
+                Show values not sync
               </label>
+            </div>
+            <div className="flex justify-end">
+              <Button
+                size="small"
+                variant="solid"
+                onClick={() => {
+                  req.fetchTerms(undefined, undefined, {
+                    tags: filterTags,
+                  })
+                }}
+              >
+                Apply changes
+              </Button>
             </div>
           </section>
         </details>
@@ -311,18 +326,6 @@ export default function List() {
           <div className="animate-pulse h-1 bg-primary/100 rounded"></div>
         )}
         {filteredItems.map((item) => {
-          const invalidFields = [
-            {
-              label: 'Without example',
-              condition: Boolean(item?.exampleSentence?.trim()),
-            },
-            {
-              label: 'Without phonetic symbols',
-              condition: Boolean(item?.phoneticSymbols?.trim()),
-            },
-            { label: 'Without type', condition: Boolean(item?.type?.length) },
-          ].filter((field) => !field.condition)
-
           return (
             <li
               key={item.id}
@@ -333,6 +336,7 @@ export default function List() {
               }`}
             >
               <Avatar src={item.image} alt={item.term} />
+
               <div className="flex-grow">
                 <h4>{Text.capitalize(item.term)}</h4>
 
@@ -353,21 +357,7 @@ export default function List() {
                   {/* <span className="ml-2 separator text-primary/20 font-bold">
                     |
                   </span> */}
-                  {invalidFields.length > 0 && (
-                    <span className="ml-2 separator text-primary/20 font-bold">
-                      |
-                    </span>
-                  )}
-                  <span className="ml-2 invalid-fields">
-                    {invalidFields.map((field) => (
-                      <span
-                        key={field.label}
-                        className="bg-red-600/40 tex-white/60 rounded-full px-1 py-[2px] text-xs ml-1"
-                      >
-                        {field.label}
-                      </span>
-                    ))}
-                  </span>
+
                   {/* <span className="ml-2 types">
                     {!hasExampleSentence && (
                       <span className="bg-red-600/40 tex-white/60 rounded-full px-1 py-[2px] text-xs ml-1">
@@ -496,51 +486,128 @@ export default function List() {
                     />
                   </button>
                 ))}
-
+              {/* !item?.exampleSentence */}
               {activeTab === 'Dictionary' && (
-                <button
-                  className="border border-red-500/20 rounded-md p-2 hover:bg-red-500/10 dark:hover:bg-red-500/20 group ml-1"
-                  onClick={(eventButton) => {
-                    //@ts-ignore
-                    eventButton.target['disabled'] = true
+                <div className="flex items-center gap-1">
+                  <div className="flex gap-1 w-[170px] h-[20px]">
+                    <TagOption
+                      show={!item?.exampleSentence}
+                      title="example sentence"
+                    >
+                      ex
+                    </TagOption>
+                    <TagOption
+                      show={!item?.nativePronunciationGuide}
+                      title="native pronunciation guide"
+                    >
+                      pr
+                    </TagOption>
+                    <TagOption
+                      show={!item?.phoneticSymbols}
+                      title="phonetic symbols"
+                    >
+                      ph
+                    </TagOption>
+                    <TagOption show={!item?.type?.length} title="type">
+                      ty
+                    </TagOption>
+                  </div>
+                  <button
+                    className="border border-blue-500/20 rounded-md p-2 hover:bg-blue-500/10 dark:hover:bg-blue-500/20 group ml-1"
+                    onClick={(eventButton) => {
+                      //@ts-ignore
+                      eventButton.target['disabled'] = true
 
-                    toast.promise(req.removeTermApi(item.id, item.term), {
-                      loading: 'Cargado...',
-                      error: (error) => {
-                        //@ts-ignore
-                        eventButton.target['disabled'] = false
+                      toast.promise(req.fetchRebuildTerm(item.id, item.term), {
+                        loading: 'Cargado...',
+                        error: (error) => {
+                          //@ts-ignore
+                          eventButton.target['disabled'] = false
 
-                        return (
-                          <div>
-                            <strong>{error.title}: </strong> {error.description}
-                            <details>
-                              <summary>Ver detalle</summary>
+                          return (
+                            <div>
+                              <strong>{error.title}: </strong>{' '}
+                              {error.description}
+                              <details>
+                                <summary>See details</summary>
 
-                              <div className="overflow-x-auto bg-red-500/10 p-2 rounded-lg">
-                                <pre>
-                                  <code>{error.details}</code>
-                                </pre>
-                              </div>
-                            </details>
-                          </div>
-                        )
-                      },
-                      success: () => {
-                        return (
-                          <>
-                            <strong>{Text.capitalize(item.term)}</strong> ha
-                            sido eliminado
-                          </>
-                        )
-                      },
-                    })
-                  }}
-                >
-                  <TrashIcon
-                    className="text-red-500 group-hover:animate-pulse duration-500"
-                    size={18}
-                  />
-                </button>
+                                <div className="overflow-x-auto bg-red-500/10 p-2 rounded-lg">
+                                  <pre>
+                                    <code>{error.details}</code>
+                                  </pre>
+                                </div>
+                              </details>
+                            </div>
+                          )
+                        },
+                        success: () => {
+                          //@ts-ignore
+                          eventButton.target['disabled'] = false
+
+                          req.fetchTerms(undefined, undefined, {
+                            tags: filterTags,
+                          })
+
+                          return (
+                            <>
+                              <strong>{Text.capitalize(item.term)}</strong> has
+                              been updated
+                            </>
+                          )
+                        },
+                      })
+                    }}
+                  >
+                    <Wrench
+                      className="text-blue-500 group-hover:animate-pulse duration-500"
+                      size={18}
+                    />
+                  </button>
+                  <button
+                    className="border border-red-500/20 rounded-md p-2 hover:bg-red-500/10 dark:hover:bg-red-500/20 group ml-1"
+                    onClick={(eventButton) => {
+                      //@ts-ignore
+                      eventButton.target['disabled'] = true
+
+                      toast.promise(req.removeTermApi(item.id, item.term), {
+                        loading: 'Cargado...',
+                        error: (error) => {
+                          //@ts-ignore
+                          eventButton.target['disabled'] = false
+
+                          return (
+                            <div>
+                              <strong>{error.title}: </strong>{' '}
+                              {error.description}
+                              <details>
+                                <summary>Ver detalle</summary>
+
+                                <div className="overflow-x-auto bg-red-500/10 p-2 rounded-lg">
+                                  <pre>
+                                    <code>{error.details}</code>
+                                  </pre>
+                                </div>
+                              </details>
+                            </div>
+                          )
+                        },
+                        success: () => {
+                          return (
+                            <>
+                              <strong>{Text.capitalize(item.term)}</strong> ha
+                              sido eliminado
+                            </>
+                          )
+                        },
+                      })
+                    }}
+                  >
+                    <TrashIcon
+                      className="text-red-500 group-hover:animate-pulse duration-500"
+                      size={18}
+                    />
+                  </button>
+                </div>
               )}
             </li>
           )

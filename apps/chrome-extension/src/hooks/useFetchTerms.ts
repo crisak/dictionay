@@ -33,6 +33,7 @@ export const useFetchTerms = () => {
     dictionaryTerms: false,
     addTerm: false,
     removeTerm: false,
+    rebuildTerm: false,
   })
 
   const [error, setError] = useState<{
@@ -231,6 +232,45 @@ export const useFetchTerms = () => {
     }
   }
 
+  const fetchRebuildTerm = async (
+    id: CardVocabulary['id'],
+    term?: CardVocabulary['term'],
+  ) => {
+    try {
+      setLoading((prev) => ({ ...prev, rebuildTerm: true }))
+
+      const result = await DictionaryApi.rebuild({
+        terms: [
+          {
+            id,
+            level: { automatic: true },
+            types: { automatic: true },
+            term: { automatic: true },
+            translation: { automatic: true },
+            pronunciation: { automatic: true },
+            examples: { automatic: true },
+            tags: { automatic: true },
+            dictionary: { automatic: true },
+          },
+        ],
+      }).finally(() => {
+        setLoading((prev) => ({ ...prev, rebuildTerm: false }))
+      })
+
+      // TODO: Update local state with new value 
+      
+      console.debug('Rebuild result', result, term)
+
+      return true
+    } catch (error) {
+      throw {
+        title: 'Error',
+        description: 'An error occurred while removing the term',
+        details: (error as Error).message ? '' : JSON.stringify(error),
+      }
+    }
+  }
+
   const removeTermToAnki = async (id: CardVocabulary['id'], term: string) => {
     try {
       setLoading((prev) => ({ ...prev, removeTerm: true }))
@@ -302,5 +342,6 @@ export const useFetchTerms = () => {
     addTermToAnki,
     addTermsToAnki,
     removeTermToAnki,
+    fetchRebuildTerm,
   }
 }
