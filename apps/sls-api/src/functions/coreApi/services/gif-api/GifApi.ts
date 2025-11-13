@@ -8,7 +8,11 @@ export class GifApi {
    * @param {string} lang - The language of the search term
    * @returns {Promise<string | null>} - The URL of the GIF or null if not found
    */
-  static async fetchSearchGif(term: string, lang?: string) {
+  static async fetchSearchGif(
+    term: string,
+    lang?: string,
+    opt?: { random?: boolean },
+  ) {
     const splitWordsBySpace = term.split(/\s+/) || []
     if (!term || splitWordsBySpace.length > 4) {
       return null
@@ -29,13 +33,19 @@ export class GifApi {
       })
 
       const gifs = response?.data?.data || []
+
+      let randomIndex = 0
+      if (opt?.random && gifs.length > 1) {
+        randomIndex = Math.floor(Math.random() * gifs.length)
+      }
+
       if (gifs.length > 0) {
         const url =
-          gifs[0].images.preview_gif.url ||
-          gifs[0].images.preview_webp.url ||
-          gifs[0].images.downsized_medium.url ||
-          gifs[0].images.preview.mp4 ||
-          gifs[0].images.downsized_small.mp4
+          gifs[randomIndex].images.preview_gif.url ||
+          gifs[randomIndex].images.preview_webp.url ||
+          gifs[randomIndex].images.downsized_medium.url ||
+          gifs[randomIndex].images.preview.mp4 ||
+          gifs[randomIndex].images.downsized_small.mp4
 
         console.debug('GIF URL:', url)
         return url
