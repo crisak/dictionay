@@ -129,6 +129,7 @@ const getTermsHandler = middy<EventGW, APIGatewayProxyResult>().handler(
       tags: string
       page: string
       limit: string
+      search?: string
     }
 
     const page = parseInt(filtersInput.page || '') || 1
@@ -140,8 +141,11 @@ const getTermsHandler = middy<EventGW, APIGatewayProxyResult>().handler(
         .map((tag) => tag.trim())
         .filter(Boolean) || []
 
+    const search = filtersInput?.search?.trim() || ''
+
     const filters = {
       tags,
+      search,
     }
 
     const { list, total } = await getTermsController(
@@ -162,6 +166,7 @@ const getTermsHandler = middy<EventGW, APIGatewayProxyResult>().handler(
         total,
         page,
         limit,
+        search,
       }),
     }
   },

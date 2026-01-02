@@ -6,6 +6,7 @@ const uriDB = `mongodb+srv://${CONFIG.dbUsername}:${CONFIG.dbPassword}@productio
 
 type Filters = {
   tags: string[]
+  search: string
 }
 
 const clientDB = new MongoClient(uriDB, {
@@ -26,6 +27,10 @@ export async function getTermsController(
     .db(CONFIG.dbName)
     .collection<UserTerm>(CONFIG.cl.userTerms)
 
+  const collectionTerms = await clientDB
+    .db(CONFIG.dbName)
+    .collection<Term>(CONFIG.cl.terms)
+
   // find terms by user with filters
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const query: any = {
@@ -34,6 +39,34 @@ export async function getTermsController(
 
   if (filters.tags && filters.tags.length > 0) {
     query.tags = { $in: filters.tags }
+  }
+
+  // If there's a search query, first find matching terms
+  let termIds: ObjectId[] = []
+
+  if (filters.search) {
+    const searchRegex = { $regex: filters.search, $options: 'i' }
+    const termsQuery = {
+      $or: [{ term: searchRegex }, { translation: searchRegex }],
+    }
+
+    const matchingTerms = await collectionTerms
+      .find(termsQuery)
+      .project({ _id: 1 })
+      .toArray()
+
+    termIds = matchingTerms.map((term) => term._id)
+
+    // If no terms match the search, return empty result
+    if (termIds.length === 0) {
+      return {
+        list: [],
+        total: 0,
+      }
+    }
+
+    // Add termId filter to user terms query
+    query.termId = { $in: termIds }
   }
 
   const termsByUser = await collection
@@ -49,14 +82,10 @@ export async function getTermsController(
    * por lotes para mejorar la eficiencia
    */
 
-  const termIds = termsByUser.map((term) => term.termId)
-
-  const collectionTerms = await clientDB
-    .db(CONFIG.dbName)
-    .collection<Term>(CONFIG.cl.terms)
+  const userTermIds = termsByUser.map((term) => term.termId)
 
   const termsDetail = await collectionTerms
-    .find({ _id: { $in: termIds } })
+    .find({ _id: { $in: userTermIds } })
     .toArray()
 
   const mergeTypes = (term: Term) => {
