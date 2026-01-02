@@ -48,12 +48,14 @@ export const TermSchema = z.object({
   examples: z
     .object({
       automatic: z.boolean().optional(),
-      value: z.array(
-        z.object({
-          sentence: z.string().min(1),
-          sentenceNative: z.string().min(1),
-        }),
-      ),
+      value: z
+        .array(
+          z.object({
+            sentence: z.string().min(1),
+            sentenceNative: z.string().min(1),
+          }),
+        )
+        .optional(),
     })
     .optional(),
 

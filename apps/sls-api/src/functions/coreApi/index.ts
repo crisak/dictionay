@@ -2,6 +2,7 @@ import SLSUtil from '../../utils/SLSUtil'
 
 export default {
   handler: `${SLSUtil.handlerPath(__dirname)}/handler.main`,
+  timeout: 30,
   // layers: [
   //   'arn:aws:lambda:${aws:region}:${aws:accountId}:layer:node_modules_layer:1',
   // ],

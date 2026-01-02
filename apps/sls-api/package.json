@@ -24,7 +24,7 @@
     "deploy:function:prod": "sls deploy function --stage prod --verbose -f"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.40.1",
+    "@anthropic-ai/sdk": "^0.68.0",
     "@aws-sdk/client-dynamodb": "^3.585.0",
     "@aws-sdk/lib-dynamodb": "^3.585.0",
     "@middy/core": "^6.1.6",

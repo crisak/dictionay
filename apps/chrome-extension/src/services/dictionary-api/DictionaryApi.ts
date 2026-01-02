@@ -1,11 +1,13 @@
 import { SETTINGS } from '../../config'
 import { CardVocabulary, FetchTags } from '../../types'
+import { ResponseRebuildTerms } from '../../types/ResponseRebuild'
 import {
   CreateTermDto,
   GetTermsFilters,
   ResultAudioDto,
   ResultGetTerm,
 } from './DictionaryApiTypes'
+import { Body } from '@repo/schemas/RequestReBuildTerms'
 
 /**
  * TODO: Remove this constant when the API is ready
@@ -353,6 +355,46 @@ export default class DictionaryApi {
       const result = await response.json()
 
       return result
+    } catch (error) {
+      console.error('Error:', error)
+      throw error
+    }
+  }
+
+  static async rebuild(data: Body) {
+    try {
+      const mockAuth = {
+        id: '60a3e5b9c7d4e12345678901',
+        username: 'opensource1998',
+      }
+
+      const myHeaders = new Headers()
+      myHeaders.append('Content-Type', 'application/json')
+      myHeaders.append('Authorization', btoa(JSON.stringify(mockAuth)))
+      myHeaders.append('X-Api-Key', DictionaryApi.API_KEY)
+
+      const raw = JSON.stringify(data)
+
+      const requestOptions = {
+        method: 'PATCH',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      } as RequestInit
+
+      const response = await fetch(
+        `${DictionaryApi.ENDPOINT}/v1/terms/re-build`,
+        requestOptions,
+      )
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw error
+      }
+
+      const result = await response.json()
+
+      return result as ResponseRebuildTerms
     } catch (error) {
       console.error('Error:', error)
       throw error

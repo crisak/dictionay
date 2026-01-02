@@ -196,7 +196,7 @@ Only include fields that were specifically requested for each term. Ensure all r
 
   try {
     const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20240620',
+      model: 'claude-sonnet-4-0',
       max_tokens: 4000,
       temperature: 0,
       messages: [
@@ -287,6 +287,7 @@ async function processTermUpdate(
       const urlImage = await GifApi.fetchSearchGif(
         newTerm,
         existingTerm.toLanguage || 'es',
+        { random: true },
       )
 
       if (urlImage) {
