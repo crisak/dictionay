@@ -240,7 +240,7 @@ Ensure all fields are filled correctly and provide natural, contextual examples.
 
   try {
     const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20240620',
+      model: 'claude-sonnet-4-0',
       max_tokens: 1000,
       temperature: 0,
       messages: [

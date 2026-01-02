@@ -35,8 +35,6 @@ const translateHandler = middy<
   EventGW<PostTranslateTerm>,
   APIGatewayProxyResult
 >().handler(async (event) => {
-  console.debug('Start POST /translate')
-
   const bodyDirty = event.body
 
   const body = {
@@ -70,8 +68,6 @@ const translateAudioHandler = middy<
   EventGW<PostTranslateTerm>,
   APIGatewayProxyResult
 >().handler(async (event) => {
-  console.debug('Start POST /translate-audio')
-
   const bodyDirty = event.body
 
   const body = {
@@ -92,8 +88,6 @@ const translateAudioHandler = middy<
 
 const createTermHandler = middy<EventGW<Term>, APIGatewayProxyResult>().handler(
   async (event) => {
-    console.debug('Start POST /terms')
-
     const body = event.body
 
     const cleanBody: CreateTermDto = {
@@ -118,8 +112,6 @@ const reBuildTermsHandler = middy<
   EventGW<RequestReBuildTerms.Body>,
   APIGatewayProxyResult
 >().handler(async (event) => {
-  console.debug('Start PATCH /v1/terms/re-build')
-
   const response = await reBuildTermsController(event.body)
 
   return {
