@@ -1,5 +1,6 @@
 export type GetTermsFilters = {
   tags?: string[]
+  search?: string
 }
 
 export interface ResultGetTerm {

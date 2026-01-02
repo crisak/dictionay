@@ -89,6 +89,10 @@ export default class DictionaryApi {
         queryPagination += `${queryPagination ? '&' : '?'}tags=${encodeURIComponent(tagsQuery)}`
       }
 
+      if (filters && filters.search) {
+        queryPagination += `${queryPagination ? '&' : '?'}search=${encodeURIComponent(filters.search)}`
+      }
+
       const result: {
         list: Array<ResultGetTerm>
         page: number

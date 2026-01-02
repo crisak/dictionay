@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { toast } from 'sonner'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Search,
   Check,
@@ -23,16 +23,65 @@ import TagOption from './TagOption'
 export default function List() {
   const tabs = ['Both', 'Anki', 'Dictionary'] as const
 
-  const [searchTerm, setSearchTerm] = useState('')
+  // Read initial values from URL params (memoized to avoid re-reading on every render)
+  const initialParams = useMemo(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    return {
+      search: urlParams.get('search') || '',
+      tags: urlParams.get('tags')?.split(',').filter(Boolean) || [],
+      page: parseInt(urlParams.get('page') || '1') || 1,
+    }
+  }, [])
+
+  const [searchTerm, setSearchTerm] = useState(initialParams.search)
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>('Both')
   const [showUnsync, setShowUnsync] = useState(false)
-  const [filterTags, setFilterTags] = useState<string[]>([])
+  const [filterTags, setFilterTags] = useState<string[]>(initialParams.tags)
   const req = useFetchTerms()
   const reqTags = useFetchTags()
+  const isInitialMount = useRef(true)
+
+  // Function to update URL params
+  const updateURLParams = (params: {
+    search?: string
+    tags?: string[]
+    page?: number
+  }) => {
+    const urlParams = new URLSearchParams(window.location.search)
+
+    if (params?.search !== undefined) {
+      if (params.search) {
+        urlParams.set('search', params.search)
+      } else {
+        urlParams.delete('search')
+      }
+    }
+
+    if (params.tags !== undefined) {
+      if (params.tags.length > 0) {
+        urlParams.set('tags', params.tags.join(','))
+      } else {
+        urlParams.delete('tags')
+      }
+    }
+
+    if (params.page !== undefined) {
+      if (params.page > 1) {
+        urlParams.set('page', params.page.toString())
+      } else {
+        urlParams.delete('page')
+      }
+    }
+
+    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`
+    window.history.pushState({}, '', newUrl)
+  }
 
   const handlePageChange = async (page: number, limit?: number) => {
+    updateURLParams({ page })
     await req.fetchTerms(page, limit, {
       tags: filterTags,
+      search: searchTerm,
     })
   }
 
@@ -57,33 +106,20 @@ export default function List() {
       itemsFilter = itemsFilter.filter((item_) => !item_.sync)
     }
 
-    if (filterTags.length) {
-      itemsFilter = itemsFilter.filter((item_) =>
-        item_.tags?.some((tag) => filterTags.includes(tag)),
-      )
-    }
-
-    return itemsFilter.filter((item_) => {
-      const termino = Text.cls(item_.term, {
-        spaces: false,
-      })
-
-      const search = Text.cls(searchTerm, {
-        spaces: false,
-      })
-
-      return termino.includes(search)
-    })
-  }, [req.cards, searchTerm, activeTab, showUnsync, filterTags])
+    return itemsFilter
+  }, [req.cards, activeTab, showUnsync])
 
   useEffect(() => {
-    console.debug('options > <List /> useEffect[]')
-    req.fetchTerms(undefined, undefined, {
-      tags: filterTags,
-    })
+    if (isInitialMount.current) {
+      req.fetchTerms(initialParams.page, undefined, {
+        tags: initialParams.tags,
+        search: initialParams.search,
+      })
 
-    reqTags.fetch()
-  }, [])
+      reqTags.fetch()
+      isInitialMount.current = false
+    }
+  }, [initialParams, req, reqTags])
 
   useEffect(() => {
     if (req.error?.description) {
@@ -167,6 +203,7 @@ export default function List() {
                   onClick={() => {
                     req.fetchTerms(undefined, undefined, {
                       tags: filterTags,
+                      search: searchTerm,
                     })
 
                     reqTags.fetch()
@@ -284,8 +321,14 @@ export default function List() {
                 size="small"
                 variant="solid"
                 onClick={() => {
-                  req.fetchTerms(undefined, undefined, {
+                  updateURLParams({
+                    search: searchTerm,
                     tags: filterTags,
+                    page: 1,
+                  })
+                  req.fetchTerms(1, undefined, {
+                    tags: filterTags,
+                    search: searchTerm,
                   })
                 }}
               >
@@ -546,6 +589,7 @@ export default function List() {
 
                           req.fetchTerms(undefined, undefined, {
                             tags: filterTags,
+                            search: searchTerm,
                           })
 
                           return (
