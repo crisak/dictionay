@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { toast } from 'sonner'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -106,8 +105,38 @@ export default function List() {
       itemsFilter = itemsFilter.filter((item_) => !item_.sync)
     }
 
+    // Apply search filter locally for Anki cards and Both tab
+    if (
+      searchTerm &&
+      (Text.cls(activeTab) === Text.cls('Anki') ||
+        Text.cls(activeTab) === Text.cls('Both'))
+    ) {
+      itemsFilter = itemsFilter.filter((item_) => {
+        const termino = Text.cls(item_.term, {
+          spaces: false,
+        })
+
+        const translation = Text.cls(item_.nativeTranslation, {
+          spaces: false,
+        })
+
+        const search = Text.cls(searchTerm, {
+          spaces: false,
+        })
+
+        return termino.includes(search) || translation.includes(search)
+      })
+    }
+
     return itemsFilter
-  }, [req.cards, activeTab, showUnsync])
+  }, [
+    req.cards,
+    req.cardsAnki,
+    req.cardsDictionary,
+    activeTab,
+    showUnsync,
+    searchTerm,
+  ])
 
   useEffect(() => {
     if (isInitialMount.current) {
