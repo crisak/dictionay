@@ -19,5 +19,11 @@
     "**/dist/**": true,
     "**/.turbo/**": true
   },
-  "conventionalCommits.scopes": ["sls-api", "admin", "dictionary", "mobile"]
+  "conventionalCommits.scopes": [
+    "sls-api",
+    "admin",
+    "dictionary",
+    "mobile",
+    "chrome-extension"
+  ]
 }
